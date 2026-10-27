@@ -10,7 +10,8 @@
     "client": "cd client && npm run dev",
     "dev": "concurrently --kill-others-on-fail -p \"[{name}]\" -n \"SERVER,CLIENT\" -c \"magenta.bold,cyan.bold\" \"npm run server\" \"npm run client\"",
     "seed": "cd server && npm run seed",
-    "build": "cd client && npm run build"
+    "build": "cd client && npm run build",
+    "test": "npm --prefix server test"
   },
   "keywords": ["student", "skill-exchange", "mern", "edu-exchange"],
   "author": "Saksham Wadhankar",

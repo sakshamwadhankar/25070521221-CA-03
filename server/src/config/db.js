@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 
 // Cache the connection promise so serverless cold-starts reuse the same connection
-let cachedConnection = null;
+let connectionPromise = null;
 
 const connectDB = async () => {
   // Return cached connection if already connected
-  if (cachedConnection && mongoose.connection.readyState === 1) {
-    return cachedConnection;
+  if (mongoose.connection.readyState === 1) {
+    return mongoose;
   }
+
+  // Concurrent cold-start requests must await the same connection attempt.
+  if (connectionPromise) return connectionPromise;
 
   const uri = process.env.MONGO_URI;
 
@@ -19,25 +22,25 @@ const connectDB = async () => {
     );
   }
 
+  connectionPromise = mongoose.connect(uri, {
+    // These options help with Vercel serverless connection reuse
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+  });
+
   try {
-    cachedConnection = await mongoose.connect(uri, {
-      // These options help with Vercel serverless connection reuse
-      maxPoolSize: 10,
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 45000,
-    });
-    console.log(`✅ MongoDB Connected: ${mongoose.connection.host}/${mongoose.connection.name}`);
-    return cachedConnection;
-  } catch (err) {
-    console.error('❌ MongoDB connection error:', err.message);
-    throw err;
+    return await connectionPromise;
+  } finally {
+    // Permit a retry after failure or a later disconnect.
+    connectionPromise = null;
   }
 };
 
 const disconnectDB = async () => {
   if (mongoose.connection.readyState !== 0) {
     await mongoose.disconnect();
-    cachedConnection = null;
+    connectionPromise = null;
   }
 };
 

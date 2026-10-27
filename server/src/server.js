@@ -52,6 +52,21 @@ app.get('/api/health', (req, res) => {
 });
 
 // Routes
+// Every data request waits for the shared connection, including serverless cold starts.
+// A failed connection returns JSON rather than exiting the Vercel function process.
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('Database unavailable:', err.name);
+    res.status(503).json({
+      success: false,
+      message: 'Database unavailable. Check MONGO_URI and MongoDB network access.',
+    });
+  }
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/skills', skillRoutes);
@@ -63,31 +78,34 @@ app.use(notFound);
 app.use(errorHandler);
 
 // ─── Start server ─────────────────────────────────────────────────────────────
-// Always listen — works for both local dev AND Vercel Services (long-running process)
-const PORT = process.env.PORT || 5000;
+// Only the local CLI starts a listener and initializes demo data.
+// Importing the app from api/index.js must not start a server or seed the database.
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
 
-connectDB()
-  .then(async () => {
-    try {
-      const User = require('./models/User');
-      const { seedData } = require('./utils/seed');
-      const userCount = await User.countDocuments();
-      if (userCount === 0) {
-        console.log('🌱 Empty database – auto-seeding initial student data...');
-        await seedData(false);
+  connectDB()
+    .then(async () => {
+      try {
+        const User = require('./models/User');
+        const { seedData } = require('./utils/seed');
+        const userCount = await User.countDocuments();
+        if (userCount === 0) {
+          console.log('🌱 Empty database – auto-seeding initial student data...');
+          await seedData(false);
+        }
+      } catch (seedErr) {
+        console.warn('⚠️ Auto-seed notice:', seedErr.message);
       }
-    } catch (seedErr) {
-      console.warn('⚠️ Auto-seed notice:', seedErr.message);
-    }
 
-    app.listen(PORT, () => {
-      console.log(`🚀 Edu Exchange API running on port ${PORT}`);
-      console.log(`📡 Health: http://localhost:${PORT}/api/health`);
+      app.listen(PORT, () => {
+        console.log(`🚀 Edu Exchange API running on port ${PORT}`);
+        console.log(`📡 Health: http://localhost:${PORT}/api/health`);
+      });
+    })
+    .catch((err) => {
+      console.error('❌ MongoDB connection failed:', err.message);
+      process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB connection failed:', err.message);
-    process.exit(1);
-  });
+}
 
 module.exports = app;

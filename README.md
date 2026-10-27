@@ -1,372 +1,642 @@
-# EDU EXCHANGE – Student Skill Exchange Platform
+<div align="center">
 
-> **“Share Skills. Build Connections. Grow Together.”**
+<img src="./client/public/favicon.svg" alt="Edu Exchange logo" width="100" height="100" />
 
-**Edu Exchange** is a full-stack student-to-student skill exchange and collaborative project platform designed specifically for college and university campuses. Featuring a retro-modern, neo-brutalist editorial design system inspired by academic design panels, Edu Exchange empowers students to trade knowledge 1-on-1 (e.g., swapping React coding skills for UI/UX Figma design) and form project teams for hackathons, capstones, and campus research.
+# Edu Exchange
+### Student Skill Exchange & Project Collaboration Platform
 
----
+**Share Skills. Build Connections. Grow Together.**
 
-## 📌 Repository Information
-- **Repository Name**: `25070521221-CA-03`
-- **Platform**: EDU EXCHANGE
-- **Architecture**: MERN (React + Express + Node.js + MongoDB)
-- **Design System**: Neo-Brutalist Editorial (Sky Blue, Mint Green, Cream, Warm Yellow, Soft Pink, Peach, Hard Black Shadows)
-- **Deployment Ready**: Local (Windows/Mac/Linux) & Vercel Ready
+A full-stack web application connecting students through peer learning, skill exchange, and collaborative projects.
 
----
+[Live Demo](https://eduexchange-five.vercel.app/) · [Source Code](https://github.com/sakshamwadhankar/25070521221-CA-03) · [Local Setup](#installation-and-local-setup) · [API Reference](#api-reference)
 
-## 🚀 Key Features
+![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=flat-square&logo=mongodb&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 
-### 1. 🎓 Landing Page (`/`)
-- Modern, vibrant hero section with the tagline: *“Learn together. Build together. Grow together.”*
-- Interactive **“I Can Teach”** vs. **“I Want to Learn”** visual breakdown.
-- 3-step explanation of how peer exchanges work.
-- Live featured skills retrieved dynamically from MongoDB.
-- Student benefits (Peer speed, hackathon squads, portfolio credibility, and campus network).
-- Responsive navigation and call-to-actions.
-
-### 2. 🔐 Student Authentication & Security (`/login`, `/signup`)
-- Student registration with full name, university email, department, year of study, bio, and initial skill listing.
-- Password hashing with **bcryptjs** (10 salt rounds).
-- **JWT (JSON Web Token)** authentication stored securely on the client.
-- Password visibility toggles (eye icons) and comprehensive field validation.
-- **1-Click Demo Login** shortcuts for instant testing as demo students (*Alex Rivera* or *Riya Sharma*).
-- Auto-redirect away from auth pages when logged in; auto-redirect to `/login` for protected pages.
-
-### 3. 📊 Interactive Student Dashboard (`/dashboard`)
-- Personalized welcome banner showing student name, department, year, and dynamic avatar initials.
-- **6 Real-Time Metric Cards**:
-  - Total Skills Offered
-  - Total Skills Wanted
-  - Pending Received Requests
-  - Pending Sent Requests
-  - Active Projects
-  - Completed Peer Exchanges
-- Quick Action Buttons: **Add Skill**, **Find a Skill**, **Create Project**, and **View Requests**.
-- Recommended skills section tailored from other students.
-- Recent exchange requests with one-click **Accept** and **Decline** actions.
-- List of current active project teams.
-
-### 4. 💡 Explore Skills Marketplace (`/skills`)
-- Live search by skill name, description, or keyword.
-- Category filters: *Programming, Design, Business, Communication, Languages, Music, Sports, Academics, Other*.
-- Skill level filter: *Beginner, Intermediate, Advanced, Expert*.
-- Informative cards displaying the teacher's profile, skill description, and what they want in exchange.
-- **Request Exchange** modal to send custom proposals.
-- **Add**, **Edit**, and **Delete** actions for own skills.
-- Load-more pagination and friendly empty-state handling.
-
-### 5. 👤 Comprehensive Student Profile (`/profile`, `/profile/:id`)
-- Colorful initials avatar generated deterministically based on student name.
-- Academic details (Department, Year of Study, Email, Bio).
-- Counter for completed exchanges.
-- Tabular display of skills the student can teach and projects joined.
-- **Edit Profile** modal to update name, department, year, and bio.
-- **Public Profile View**: Visiting `/profile/:id` allows any student to view classmates' skills and propose a trade.
-
-### 6. 🤝 Exchange Requests Management (`/requests`)
-- **5 Filterable Status Tabs**:
-  1. *Received Requests* (with unread badge counter)
-  2. *Sent Requests*
-  3. *Accepted Requests*
-  4. *Rejected Requests*
-  5. *Completed Exchanges*
-- Full request lifecycle: **Send**, **Accept**, **Decline**, **Cancel**, and **Mark as Completed**.
-- Prevents duplicate pending requests between students.
-- Automatically creates notifications when requests are sent or updated.
-
-### 7. 🚀 Student Project Squads (`/projects`)
-- Browse student collaboration projects (Hackathon teams, study groups, research, capstones).
-- Filter by category (*Technical, Academic, Hackathon, Research, Creative, Social*) and status (*Open, In Progress, Completed*).
-- Detailed project view modal displaying description, required skill tags, deadline, and member roster.
-- **Join Project** workflow: students can apply with a custom intro note.
-- **Project Lead Controls**: owners can review, accept, or decline applicant join requests.
-
-### 8. 🔔 Notification System
-- Real-time notification bell dropdown in navigation bar.
-- Shows alerts when classmates send requests or accept applications.
-- Unread badge counter with *“Mark all as read”* functionality.
+</div>
 
 ---
 
-## 🛠️ Technology Stack
+## Project Information
 
-| Layer | Technologies Used |
+| Item | Details |
 |---|---|
-| **Frontend** | React 18 (Vite), React Router v6, Axios, Vanilla CSS (Flexbox & CSS Grid) |
-| **Backend** | Node.js, Express.js, CORS, Dotenv |
-| **Database** | MongoDB with Mongoose ODM |
-| **Database Tool** | MongoDB Compass |
-| **Authentication** | JWT (jsonwebtoken) & bcryptjs |
-| **Deployment** | Vercel configuration (`vercel.json`) & Concurrently for local dev |
+| Project | Edu Exchange |
+| Developed by | Saksham Wadhankar |
+| Submission repository | `25070521221-CA-03` |
+| Architecture | MERN: MongoDB, Express, React, Node.js |
+| Language | JavaScript / JSX |
+| Database inspection | MongoDB Compass |
+| Deployment | Vercel frontend and Node.js function |
+| Live demo | https://eduexchange-five.vercel.app/ |
 
----
+## Table of Contents
 
-## 📂 Project Structure
+1. [Overview and Problem Statement](#overview-and-problem-statement)
+2. [Objectives](#objectives)
+3. [Features](#features)
+4. [Application Pages](#application-pages)
+5. [Technology Stack](#technology-stack)
+6. [System Architecture](#system-architecture)
+7. [Project Structure](#project-structure)
+8. [Database Design](#database-design)
+9. [Installation and Local Setup](#installation-and-local-setup)
+10. [MongoDB Compass](#mongodb-compass)
+11. [Demo Accounts and Seed Data](#demo-accounts-and-seed-data)
+12. [Available Commands](#available-commands)
+13. [API Reference](#api-reference)
+14. [Authentication and Authorization](#authentication-and-authorization)
+15. [Design System](#design-system)
+16. [Vercel Deployment](#vercel-deployment)
+17. [Demonstration Walkthrough](#demonstration-walkthrough)
+18. [Verification](#verification)
+19. [Troubleshooting](#troubleshooting)
+20. [Current Scope and Future Improvements](#current-scope-and-future-improvements)
+21. [Learning Outcomes](#learning-outcomes)
 
+## Overview and Problem Statement
+
+Students have useful skills but often lack a structured way to discover peers who can teach complementary skills or collaborate on projects. Group chats make it difficult to find suitable partners, track learning requests, and organize team participation.
+
+**Edu Exchange** provides searchable skill listings, student profiles, exchange requests, and project collaboration in one application. Data is stored in MongoDB and retrieved through an Express REST API.
+
+### Example use case
+
+A student who knows **React.js** wants to learn **Figma**. Another student can teach Figma and wants help with frontend development. They can discover each other, view profiles, send an exchange request, accept it, and record completion. They can also collaborate on a project.
+
+## Objectives
+
+- Encourage peer-to-peer learning and knowledge sharing.
+- Help students showcase skills and describe learning interests.
+- Provide a clear request and response workflow.
+- Connect students with academic, hackathon, and creative project teams.
+- Demonstrate frontend-backend integration and persistent CRUD operations.
+- Build a responsive interface with a consistent visual identity.
+
+## Features
+
+| Module | Implemented capabilities |
+|---|---|
+| Authentication | Signup, login, password visibility, validation, JWT authentication, logout |
+| Student profiles | Name, department, year, bio, initials avatar, offered skills, associated projects, exchange count |
+| Skill marketplace | Create, browse, update, delete, search, category/level filters, pagination |
+| Teaching and learning | Each listing describes a skill offered and a skill wanted in exchange |
+| Learning requests | Send, receive, accept, reject, cancel, complete, and remove requests |
+| Projects | Create/edit/delete owned projects, discover teams, apply to join, approve or reject applicants |
+| Dashboard | Skill counts, pending request counts, active project count, recent requests and peer listings |
+| Notifications | Notification history, unread indicators, mark one/all as read, periodic refresh |
+| Interface | Sidebar, mobile layouts, modal forms, toast messages, loading and empty states |
+
+**Skill categories:** Programming, Design, Business, Communication, Languages, Music, Sports, Academics, Other.
+
+**Skill levels:** Beginner, Intermediate, Advanced, Expert.
+
+**Project categories:** Academic, Hackathon, Research, Technical, Creative, Social.
+
+**Project statuses:** Open, In Progress, Completed.
+
+**Request statuses:** pending, accepted, rejected, cancelled, completed.
+
+## Application Pages
+
+| Route | Purpose | Frontend access |
+|---|---|---|
+| `/` | Branded authentication entry screen | Public; redirects after login |
+| `/login` | Shared sign-in/register screen | Public-only |
+| `/signup` | Shared sign-in/register screen | Public-only |
+| `/dashboard` | Personal statistics and recent activity | Login required |
+| `/skills` | Skill discovery and listing management | Login required |
+| `/profile` | Current student's profile | Login required |
+| `/profile/:id` | Another student's profile | Login required |
+| `/requests` | Learning and collaboration requests | Login required |
+| `/projects` | Project discovery and team formation | Login required |
+| `/notifications` | Notification history | Login required |
+
+Login and registration use a shared component with **Sign In** and **Register** tabs. Project details and editing workflows use modals. `App.jsx` defines the active routes; additional page components remain in the source tree.
+
+Frontend navigation protection and backend API authorization are separate. Some read-only API routes are public, as listed below.
+
+## Technology Stack
+
+| Layer | Technologies and purpose |
+|---|---|
+| UI | React 18, JSX, HTML, plain CSS, responsive Flexbox/Grid |
+| Routing and state | React Router 6, React Context |
+| Frontend tooling | Vite 5, Axios |
+| Backend | Node.js, Express 4 |
+| Persistence | MongoDB, Mongoose 8 schemas and references |
+| Authentication | bcryptjs password hashing, jsonwebtoken |
+| Configuration | dotenv, CORS middleware |
+| Development | Nodemon, Concurrently, Git |
+| Database inspection | MongoDB Compass |
+| Hosting | Vercel |
+
+## System Architecture
+
+```text
+Student / Browser
+       |
+React pages, reusable components, and Context
+       |
+       | Axios HTTP requests / JSON
+       v
+Express -> Database readiness -> Routes / Authentication -> Controllers
+       |
+Mongoose schemas, validation, queries, and references
+       |
+MongoDB: users | skills | projects | requests | notifications
 ```
+
+### Example: creating a skill
+
+1. A student submits the React skill form.
+2. Axios sends `POST /api/skills` with the JWT.
+3. The backend waits for the shared MongoDB connection and verifies authentication.
+4. The controller validates the required fields and creates the skill document.
+5. The user's offered-skill references are updated.
+6. The API returns JSON and React refreshes the displayed content.
+
+Local development uses Vite's `/api` proxy to the Express server on port `5000`. On Vercel, `/api/*` is routed to `api/index.js`; static frontend assets and React pages are served from `client/dist`.
+
+## Project Structure
+
+```text
 25070521221-CA-03/
 ├── client/
-│   ├── public/
-│   │   └── favicon.svg
+│   ├── public/favicon.svg
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── Avatar.jsx
-│   │   │   ├── EmptyState.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   ├── Loader.jsx
-│   │   │   ├── Modal.jsx
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── ProjectCard.jsx
-│   │   │   ├── ProtectedRoute.jsx
-│   │   │   ├── RequestCard.jsx
-│   │   │   └── SkillCard.jsx
-│   │   ├── context/
-│   │   │   ├── AuthContext.jsx
-│   │   │   └── ToastContext.jsx
-│   │   ├── pages/
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── ExploreSkills.jsx
-│   │   │   ├── Landing.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   ├── Projects.jsx
-│   │   │   ├── Requests.jsx
-│   │   │   └── Signup.jsx
-│   │   ├── services/
-│   │   │   ├── api.js
-│   │   │   ├── authService.js
-│   │   │   ├── notificationService.js
-│   │   │   ├── projectService.js
-│   │   │   ├── requestService.js
-│   │   │   ├── skillService.js
-│   │   │   └── userService.js
-│   │   ├── styles/
-│   │   │   ├── components.css
-│   │   │   └── index.css
-│   │   ├── App.jsx
-│   │   └── main.jsx
+│   │   ├── components/    # App shell, sidebar, cards, forms, modals
+│   │   ├── context/       # Authentication and toast state
+│   │   ├── pages/         # Authentication, dashboard, skills, profiles, etc.
+│   │   ├── services/      # Axios instance and feature-specific API calls
+│   │   ├── styles/        # Theme and component styles
+│   │   ├── App.jsx        # Active application routes
+│   │   └── main.jsx       # React entry point
 │   ├── index.html
-│   ├── package.json
-│   └── vite.config.js
+│   ├── vite.config.js
+│   └── package.json
 ├── server/
 │   ├── src/
-│   │   ├── config/
-│   │   │   └── db.js
-│   │   ├── controllers/
-│   │   │   ├── authController.js
-│   │   │   ├── notificationController.js
-│   │   │   ├── projectController.js
-│   │   │   ├── requestController.js
-│   │   │   ├── skillController.js
-│   │   │   └── userController.js
-│   │   ├── middleware/
-│   │   │   ├── auth.js
-│   │   │   └── errorHandler.js
-│   │   ├── models/
-│   │   │   ├── Notification.js
-│   │   │   ├── Project.js
-│   │   │   ├── Request.js
-│   │   │   ├── Skill.js
-│   │   │   └── User.js
-│   │   ├── routes/
-│   │   │   ├── authRoutes.js
-│   │   │   ├── notificationRoutes.js
-│   │   │   ├── projectRoutes.js
-│   │   │   ├── requestRoutes.js
-│   │   │   ├── skillRoutes.js
-│   │   │   └── userRoutes.js
-│   │   ├── utils/
-│   │   │   ├── avatar.js
-│   │   │   ├── generateToken.js
-│   │   │   └── seed.js
-│   │   └── server.js
-│   ├── .env.example
+│   │   ├── config/db.js   # Shared MongoDB connection
+│   │   ├── controllers/  # Feature-specific application logic
+│   │   ├── middleware/   # Authentication and error handling
+│   │   ├── models/       # User, Skill, Project, Request, Notification
+│   │   ├── routes/       # REST endpoint definitions
+│   │   ├── utils/        # Token generation, avatars, and seed data
+│   │   └── server.js     # Express app and local startup
+│   ├── test/             # Deployment regression tests
 │   └── package.json
-├── api/
-│   └── index.js
-├── vercel.json
-├── package.json
+├── api/index.js           # Vercel function entry point
+├── vercel.json            # Build, function, and SPA routing configuration
+├── package.json           # Root development/build/test commands
 └── README.md
 ```
 
----
+## Database Design
 
-## 🗄️ Database Collections (MongoDB)
+Mongoose defines five collections with document references and `createdAt`/`updatedAt` timestamps.
 
-1. **`users`**:
-   - `name`, `email`, `passwordHash`, `department`, `year`, `bio`, `avatarInitials`, `offeredSkills`, `wantedSkills`, `completedExchanges`, `createdAt`, `updatedAt`
-2. **`skills`**:
-   - `name`, `category`, `level`, `description`, `offeredBy` (ref: User), `wantedSkill`, `availability`, `createdAt`, `updatedAt`
-3. **`projects`**:
-   - `title`, `description`, `category`, `owner` (ref: User), `requiredSkills`, `members` ([ref: User]), `maxMembers`, `deadline`, `status`, `createdAt`, `updatedAt`
-4. **`requests`**:
-   - `sender` (ref: User), `receiver` (ref: User), `requestType` (`skill-exchange` | `project-join`), `skillId`, `projectId`, `offeredSkill`, `wantedSkill`, `message`, `status` (`pending`, `accepted`, `rejected`, `cancelled`, `completed`), `createdAt`, `updatedAt`
-5. **`notifications`**:
-   - `user` (ref: User), `title`, `message`, `type`, `relatedRequest`, `isRead`, `createdAt`
+| Collection | Main fields | Purpose |
+|---|---|---|
+| `users` | `name`, `email`, `passwordHash`, `department`, `year`, `bio`, `avatarInitials`, `offeredSkills`, `wantedSkills`, `completedExchanges` | Accounts and student profiles |
+| `skills` | `name`, `category`, `level`, `description`, `offeredBy`, `wantedSkill`, `availability` | Teaching offers and learning interests |
+| `projects` | `title`, `description`, `category`, `owner`, `requiredSkills`, `members`, `maxMembers`, `deadline`, `status` | Collaboration opportunities and teams |
+| `requests` | `sender`, `receiver`, `requestType`, `skillId`, `projectId`, `offeredSkill`, `wantedSkill`, `message`, `status` | Skill exchanges and project applications |
+| `notifications` | `user`, `title`, `message`, `type`, `relatedRequest`, `isRead` | Activity alerts |
 
----
+### Relationships
 
-## 🧭 MongoDB Compass Connection Instructions
+```text
+User -> offers many Skills
+User -> owns and joins Projects
+Request -> connects sender and receiver Users
+Request -> references a Skill or Project
+Notification -> belongs to a User and may reference a Request
+```
 
-1. Open **MongoDB Compass**.
-2. In the connection string field, paste:
-   ```
-   mongodb://127.0.0.1:27017
-   ```
-3. Click **Connect**.
-4. You will see the database named `flexi` with the 5 collections (`users`, `skills`, `projects`, `requests`, `notifications`).
-5. You can inspect documents, add queries, or modify data in real-time.
+- `users.email` has a unique index.
+- Skill and project schemas define text indexes; current listing controllers use case-insensitive pattern matching.
+- `offeredSkills`, `wantedSkills`, `owner`, `members`, and request participants use ObjectId references.
+- `skills.wantedSkill` is a text description, distinct from the `users.wantedSkills` reference array.
+- Request types are `skill-exchange` and `project-join`.
+- Notification types are `skill-exchange`, `project-join`, `status-update`, and `info`.
 
-> **Zero-Setup Fallback**: If you run the project without MongoDB Compass active, the server automatically starts an in-memory database instance so that development and testing never crash!
+## Installation and Local Setup
 
----
+### Prerequisites
 
-## 🔑 Demo Login Credentials
+- A supported Node.js LTS release with npm
+- Git
+- MongoDB Community Server or a MongoDB Atlas database
+- MongoDB Compass for inspecting records
+- A modern browser
 
-The database seeder pre-populates **8 demo students** across multiple college majors. All demo accounts use the password: `Demo123`.
+**Compass is a database management GUI, not the MongoDB server.** The application needs a running local server or a reachable hosted database.
 
-| Student Name | Email Address | Password | Major / Department | Role / Specialty |
-|---|---|---|---|---|
-| **Alex Rivera** | `alex@flexi.com` | `Demo123` | Computer Science (3rd Yr) | React.js & Node.js Mentor |
-| **Riya Sharma** | `riya@flexi.com` | `Demo123` | Information Tech (2nd Yr) | Figma UI/UX Designer |
-| **Marcus Chen** | `marcus@flexi.com` | `Demo123` | Computer Science (4th Yr) | Algorithms & C++ Tutor |
-| **Priya Patel** | `priya@flexi.com` | `Demo123` | Electronics & Comm (3rd Yr) | Arduino & IoT Hardware |
-| **David Kim** | `david@flexi.com` | `Demo123` | Business Admin (2nd Yr) | Pitch Decks & Finance |
-| **Sarah Johnson** | `sarah@flexi.com` | `Demo123` | Linguistics (1st Yr) | Conversational Spanish |
-| **Liam Wilson** | `liam@flexi.com` | `Demo123` | Mechanical Eng (3rd Yr) | 3D Modeling with Blender |
-| **Ananya Gupta** | `ananya@flexi.com` | `Demo123` | Data Science (4th Yr) | Machine Learning & Python |
+### 1. Clone and install
 
-> **Pro-Tip**: On the `/login` page, you can click the quick-fill buttons (`Alex` or `Riya`) to sign in with a single click!
+```bash
+git clone https://github.com/sakshamwadhankar/25070521221-CA-03.git
+cd 25070521221-CA-03
+npm run install:all
+```
 
----
+### 2. Configure the backend
 
-## ⚙️ Environment Variables
+Create `server/.env`:
 
-### Server (`server/.env`):
 ```env
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/flexi
-JWT_SECRET=flexi_secret_key_student_platform_2026_super_secure
+JWT_SECRET=replace_with_a_long_random_secret
 CLIENT_URL=http://localhost:5173
 ```
 
-### Frontend (`client/.env`):
-```env
-VITE_API_URL=http://localhost:5000/api
-```
+Generate a secret with:
 
----
-
-## 💻 Installation & Setup
-
-### 1. Install All Dependencies
-From the root folder, run:
 ```bash
-npm run install:all
+node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
 ```
-*(Or install individually: `npm install`, `cd server && npm install`, `cd client && npm install`)*
 
-### 2. Seed Demo Data
-Populate MongoDB with 8 students, 20 skills, 6 projects, 10 requests, and 5 notifications:
+For Atlas, use your own connection string:
+
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>/flexi
+```
+
+The database name `flexi` is retained from the original configuration and does not affect Edu Exchange branding. Keep credentials and `.env` files outside version control.
+
+### 3. Configure the frontend
+
+Create `client/.env`:
+
+```env
+VITE_API_URL=/api
+```
+
+The local Vite proxy forwards `/api` requests to port `5000`. The deployed application uses same-origin API requests.
+
+### 4. Start MongoDB and the application
+
+Start the local MongoDB service, or ensure Atlas credentials and network access are configured. Then run:
+
+```bash
+npm run dev
+```
+
+| Service | Address |
+|---|---|
+| Frontend | http://localhost:5173 |
+| Backend base URL | http://localhost:5000/api |
+| Process health | http://localhost:5000/api/health |
+
+Local startup attempts to initialize sample data if the users collection is empty. Use a dedicated development database. Importing the deployed function does not run this initialization.
+
+### 5. Build and test
+
+```bash
+npm run build
+npm test
+```
+
+The frontend build is generated in `client/dist/`. Tests cover deployment routing expectations and server/database readiness behavior; they do not replace the end-to-end checklist below.
+
+## MongoDB Compass
+
+1. Open Compass and connect using the backend's MongoDB URI.
+2. For a local database, use `mongodb://127.0.0.1:27017/flexi`.
+3. Open `flexi` and inspect the five collections.
+4. Perform an operation in Edu Exchange.
+5. Refresh Compass to see the corresponding document or status update.
+
+For a demonstration, register a student, create a skill, send a request, and create a project. Show the related documents and ObjectId references in Compass, then refresh the browser to demonstrate persistence.
+
+## Demo Accounts and Seed Data
+
+| Student | Email | Password |
+|---|---|---|
+| Alex Rivera | `alex@flexi.com` | `Demo123` |
+| Riya Sharma | `riya@flexi.com` | `Demo123` |
+
+These credentials work when the provided seed data exists in the connected database. Demo buttons fill the authentication form; submit the form to sign in. The sample email addresses retain their original naming.
+
+To reset and populate a **disposable development database**:
+
 ```bash
 npm run seed
 ```
 
-### 3. Start Frontend & Backend Simultaneously
-```bash
-npm run dev
+**The seed script deletes existing users, skills, projects, requests, and notifications before inserting sample data.** Do not run it against a database containing records you need to keep. The application requires a real MongoDB connection; do not rely on an in-memory fallback.
+
+## Available Commands
+
+Run from the repository root:
+
+| Command | Purpose |
+|---|---|
+| `npm install` | Install root dependencies |
+| `npm run install:all` | Install root, server, and client dependencies |
+| `npm run install:server` | Install server dependencies |
+| `npm run install:client` | Install client dependencies |
+| `npm run dev` | Start frontend and backend together |
+| `npm run server` | Start backend with Nodemon |
+| `npm run client` | Start Vite development server |
+| `npm run build` | Build production frontend |
+| `npm test` | Run deployment regression tests |
+| `npm run seed` | Reset and populate the configured database |
+| `npm --prefix server start` | Start backend without Nodemon |
+
+## API Reference
+
+**Local base:** `http://localhost:5000/api`
+
+**Deployment base:** `https://eduexchange-five.vercel.app/api`
+
+Protected endpoints require `Authorization: Bearer <JWT_TOKEN>`. JSON requests use `Content-Type: application/json`.
+
+### Health and authentication
+
+| Method | Endpoint | Access | Purpose |
+|---|---|---|---|
+| GET | `/api/health` | Public | Check that the API process responds; does not prove database availability |
+| POST | `/api/auth/signup` | Public | Register a student |
+| POST | `/api/auth/login` | Public | Authenticate and issue JWT |
+| GET | `/api/auth/me` | Authenticated | Current user |
+| POST | `/api/auth/logout` | Public | Logout acknowledgement |
+
+### Users
+
+| Method | Endpoint | Access | Purpose |
+|---|---|---|---|
+| GET | `/api/users` | Public | Browse/filter students |
+| GET | `/api/users/search?q=alex` | Public | Search names and departments |
+| GET | `/api/users/:id` | Public | Student profile |
+| GET | `/api/users/dashboard/stats` | Authenticated | Dashboard metrics and recent items |
+| PUT | `/api/users/profile` | Authenticated | Update own profile |
+
+### Skills
+
+| Method | Endpoint | Access | Purpose |
+|---|---|---|---|
+| GET | `/api/skills` | Public | Search/filter/paginate listings |
+| GET | `/api/skills/:id` | Public | Skill details |
+| POST | `/api/skills` | Authenticated | Create listing |
+| PUT | `/api/skills/:id` | Owner | Edit listing |
+| DELETE | `/api/skills/:id` | Owner | Delete listing |
+
+Listing parameters: `search`, `category`, `level`, `page`, `limit`.
+
+Example: `/api/skills?search=react&category=Programming&page=1&limit=12`
+
+### Requests
+
+All request routes require authentication. Action-specific participant checks also apply.
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/requests/sent` | Sent requests |
+| GET | `/api/requests/received` | Received requests |
+| POST | `/api/requests` | Create request |
+| PUT | `/api/requests/:id/accept` | Recipient accepts |
+| PUT | `/api/requests/:id/reject` | Recipient rejects |
+| PUT | `/api/requests/:id/cancel` | Sender cancels |
+| PUT | `/api/requests/:id/complete` | Participant completes accepted exchange |
+| DELETE | `/api/requests/:id` | Participant removes request |
+
+### Projects
+
+| Method | Endpoint | Access | Purpose |
+|---|---|---|---|
+| GET | `/api/projects` | Public | Search/filter projects |
+| GET | `/api/projects/:id` | Optional authentication | Project details; owner token adds pending-applicant information |
+| POST | `/api/projects` | Authenticated | Create project |
+| PUT | `/api/projects/:id` | Owner | Edit project |
+| DELETE | `/api/projects/:id` | Owner | Delete project |
+| POST | `/api/projects/:id/join` | Authenticated | Apply to join |
+| PUT | `/api/projects/:id/members/:requestId/accept` | Owner | Accept applicant |
+| PUT | `/api/projects/:id/members/:requestId/reject` | Owner | Reject applicant |
+
+Project listing parameters: `search`, `category`, `status`.
+
+### Notifications
+
+All notification routes require authentication.
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/notifications` | Own notifications |
+| PUT | `/api/notifications/:id/read` | Mark one as read |
+| PUT | `/api/notifications/read-all` | Mark all as read |
+
+### Example skill creation body
+
+```json
+{
+  "name": "React.js",
+  "category": "Programming",
+  "level": "Intermediate",
+  "description": "Learn components, hooks, routing, and API integration.",
+  "wantedSkill": "Figma UI/UX Design",
+  "availability": "Weekend evenings"
+}
 ```
-- **Backend API**: `http://localhost:5000/api/health`
-- **Frontend App**: `http://localhost:5173`
+
+### Example error response
+
+```json
+{
+  "success": false,
+  "message": "Invalid email or password"
+}
+```
+
+Database connection failures return a JSON `503` response so the frontend can display a useful error instead of receiving a platform crash page.
+
+## Authentication and Authorization
+
+1. The frontend submits the student's credentials.
+2. Express looks up the user and bcrypt compares the password hash.
+3. The server issues a JWT.
+4. AuthContext maintains user state and stores the token in browser `localStorage`.
+5. Axios attaches it to API requests.
+6. Backend middleware verifies tokens on protected operations.
+
+Implemented controls include password hashing, omitted password hashes in normal responses, required-field/schema validation, unique emails, protected routes, ownership checks for edits/deletion, and participant checks for request actions.
+
+Tokens currently expire after 30 days. Logout clears the browser token and user state; there is no server-side token revocation list.
+
+## Design System
+
+The interface uses a **retro-modern, neo-brutalist** design: black borders, hard offset shadows, pastel panels, editorial headings, compact badges, and responsive grids.
+
+| Color | Hex | Typical use |
+|---|---|---|
+| Sky blue | `#5EC0F0` | Outer background |
+| Mint green | `#B7DDBD` | Navigation and panels |
+| Cream | `#FFF6E4` | Content surfaces |
+| Warm yellow | `#FFD447` | Feature cards and branding |
+| Soft pink | `#F4B6E6` | Accent panels |
+| Peach | `#FFA983` | Decorative shapes |
+| Black | `#111111` | Borders, typography, buttons |
+
+The actual SVG favicon is embedded at the top of this README. Its yellow card and `</>` symbol represent learning and technical collaboration.
+
+**Logo asset:** [`client/public/favicon.svg`](./client/public/favicon.svg)
+
+## Vercel Deployment
+
+**Website:** https://eduexchange-five.vercel.app/
+
+The repository uses a standard static frontend plus a Node.js function. `vercel.json` explicitly installs all package dependencies, runs the frontend build, and publishes `client/dist`.
+
+### Routing order
+
+1. `/api` and `/api/*` go to `api/index.js` with the original request path.
+2. Existing frontend files (JavaScript, CSS, SVG) are served directly.
+3. Other paths, including `/` and `/login`, serve `/index.html` for React Router.
+
+The function imports the Express app without starting a second HTTP listener or auto-seeding data. Database-dependent requests await a shared connection attempt. Failed attempts can be retried on subsequent requests.
+
+### Vercel project settings
+
+| Setting | Value |
+|---|---|
+| Root Directory | Repository root, not `client` or `server` |
+| Framework Preset | Other (`framework: null` in configuration) |
+| Install Command | Defined by `vercel.json` |
+| Build Command | `npm run build` |
+| Output Directory | `client/dist` |
+
+Set production environment variables:
+
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>/flexi
+JWT_SECRET=<generated-random-secret>
+CLIENT_URL=https://eduexchange-five.vercel.app
+NODE_ENV=production
+VITE_API_URL=/api
+```
+
+Use a reachable hosted MongoDB database. Vercel cannot reach MongoDB on your personal computer through `127.0.0.1`. Never expose the database URI or JWT secret through `VITE_` variables.
+
+Deploy the commit containing the current configuration. A redeployment of an older commit retains the old behavior. On the first deployment after configuration changes, disable reuse of the existing build cache.
+
+After deployment, check `/`, `/login`, `/favicon.svg`, `/api/health`, and `/api/skills?limit=1`. Then verify signup/login and a database write. Vercel's “Ready” status and the health endpoint alone do not prove database-backed workflows work.
+
+## Demonstration Walkthrough
+
+1. **Authentication:** Register a student, show the dashboard redirect, log out, and sign back in.
+2. **Profile:** Update the student's bio or department and refresh to show persistence.
+3. **Skills:** Publish a listing, explain “I can teach” and “I want to learn”, search/filter it, and edit it.
+4. **Exchange:** Use two accounts in separate browser profiles. Send, accept, and complete a skill exchange; show the resulting notification and count.
+5. **Projects:** Create a project, apply from the other account, and accept the applicant as the owner.
+6. **Database:** Show corresponding records and ObjectId relationships in MongoDB Compass.
+7. **Code:** Explain a React service call, its Express route/controller, and the associated Mongoose model.
+
+## Verification
+
+### Automated checks
+
+```bash
+npm run build
+npm test
+```
+
+The regression tests check that importing the serverless entry does not start database work, health checks respond independently, data requests wait for MongoDB, failed connections return JSON and can be retried, concurrent connections share an attempt, and deployment routing distinguishes APIs, assets, and frontend pages. Database behavior in these tests is mocked; no existing database records are changed.
+
+### End-to-end checklist
+
+Run against the final submission. These are verification steps, not a claim that every scenario has already passed.
+
+- [ ] Signup creates a record; duplicate email is rejected.
+- [ ] Login accepts valid credentials and rejects invalid ones.
+- [ ] Logout clears the session; protected routes require authentication.
+- [ ] Profile changes survive refresh.
+- [ ] Skill create, edit, delete, search, filters, and pagination work.
+- [ ] Skill edits and deletion require ownership.
+- [ ] Requests appear in sent/received lists and update after actions.
+- [ ] Duplicate pending requests are rejected.
+- [ ] Accepted exchanges can be completed.
+- [ ] Project creation, editing, deletion, join applications, and approval work.
+- [ ] Notification read actions update the interface and database.
+- [ ] Mobile and desktop layouts remain usable.
+- [ ] Homepage and deep links load directly on Vercel.
+- [ ] Deployed data APIs return JSON and MongoDB writes persist.
+
+## Troubleshooting
+
+| Problem | What to check |
+|---|---|
+| Homepage/deep link returns 404 | Deploy the latest root `vercel.json`, use repository Root Directory, and verify SPA fallback. |
+| `FUNCTION_INVOCATION_FAILED` | Inspect Vercel runtime logs and confirm the new serverless entry and backend dependencies were deployed. |
+| API returns JSON 503 | Check `MONGO_URI`, Atlas credentials/network access, and database reachability. |
+| Health works but skills do not | Health tests the API process, not MongoDB. Test `/api/skills?limit=1`. |
+| Compass opens but connection fails | Compass is a GUI; MongoDB Server must run or Atlas must be reachable. |
+| Demo login fails | Confirm sample accounts exist in the connected database. |
+| Live site calls localhost | Use frontend `VITE_API_URL=/api`, then rebuild/redeploy. |
+| Port 5000 is occupied | Stop the conflicting process or update both backend port and Vite proxy target. |
+| Old interface/config remains online | Check deployed commit, environment, domain assignment, and build cache. |
+
+## Current Scope and Future Improvements
+
+### Current scope
+
+- REST API integration with MongoDB persistence.
+- Student accounts, skill listings, requests, projects, and notifications.
+- Notification refresh approximately every 15 seconds through polling.
+- Dashboard recommendations based on recent listings from other students.
+- Learning interests recorded in skill listings; user wanted-skill references are displayed when present.
+
+### Future improvements
+
+- Dedicated wanted-skills management.
+- Real-time messaging and notification delivery.
+- Session scheduling and calendar integration.
+- Ratings and reviews after completed exchanges.
+- Personalized skill recommendations.
+- Email verification and password recovery.
+- End-to-end browser tests.
+- Stronger request-state transitions and concurrent team-capacity validation.
+
+## Learning Outcomes
+
+- Designing reusable React components and responsive CSS layouts.
+- Managing authentication and UI feedback through Context.
+- Building REST endpoints using Express.
+- Connecting frontend forms to backend controllers.
+- Modeling and querying MongoDB documents with Mongoose.
+- Implementing CRUD, search, filtering, pagination, and document references.
+- Understanding password hashing, JWT authentication, and ownership checks.
+- Configuring environment variables, static hosting, SPA routing, and serverless entry points.
+- Inspecting persistent records using MongoDB Compass.
+
+## GitHub About
+
+**Description:** A MERN-stack student platform for exchanging skills, finding learning partners, and collaborating on college projects.
+
+**Website:** https://eduexchange-five.vercel.app/
+
+**Suggested topics:** `react`, `nodejs`, `express`, `mongodb`, `mern-stack`, `skill-exchange`, `student-project`, `vite`.
+
+## Author
+
+**Saksham Wadhankar**
+
+GitHub: [@sakshamwadhankar](https://github.com/sakshamwadhankar)
+
+Repository: [25070521221-CA-03](https://github.com/sakshamwadhankar/25070521221-CA-03)
 
 ---
 
-## 📡 API Endpoints Reference
+<div align="center">
 
-### Authentication (`/api/auth`)
-- `POST /api/auth/signup` - Register a student account
-- `POST /api/auth/login` - Sign in and receive JWT token
-- `GET /api/auth/me` - Get logged-in student profile (Protected)
-- `POST /api/auth/logout` - Sign out
+**Edu Exchange**
 
-### Users (`/api/users`)
-- `GET /api/users` - Get list of students (filter by department/year)
-- `GET /api/users/search?q=` - Search students
-- `GET /api/users/dashboard/stats` - Personalized metrics & recommended skills (Protected)
-- `GET /api/users/:id` - Get public profile of a student
-- `PUT /api/users/profile` - Update student profile (Protected)
+*Share Skills. Build Connections. Grow Together.*
 
-### Skills (`/api/skills`)
-- `GET /api/skills` - Browse skills (search, category, level, pagination)
-- `GET /api/skills/:id` - Get skill by ID
-- `POST /api/skills` - Add new skill listing (Protected)
-- `PUT /api/skills/:id` - Edit own skill listing (Protected)
-- `DELETE /api/skills/:id` - Delete own skill listing (Protected)
-
-### Requests (`/api/requests`)
-- `GET /api/requests/sent` - Get outgoing exchange requests (Protected)
-- `GET /api/requests/received` - Get incoming exchange requests (Protected)
-- `POST /api/requests` - Send new exchange request (Protected)
-- `PUT /api/requests/:id/accept` - Accept incoming request (Protected)
-- `PUT /api/requests/:id/reject` - Decline incoming request (Protected)
-- `PUT /api/requests/:id/cancel` - Cancel sent request (Protected)
-- `PUT /api/requests/:id/complete` - Mark exchange as completed (Protected)
-- `DELETE /api/requests/:id` - Remove request (Protected)
-
-### Projects (`/api/projects`)
-- `GET /api/projects` - Browse projects (filter by category, status, search)
-- `GET /api/projects/:id` - Get project details & pending applicants (Protected)
-- `POST /api/projects` - Create project (Protected)
-- `PUT /api/projects/:id` - Update project (Protected)
-- `DELETE /api/projects/:id` - Delete project (Protected)
-- `POST /api/projects/:id/join` - Apply to join project (Protected)
-- `PUT /api/projects/:id/members/:requestId/accept` - Accept applicant (Protected)
-- `PUT /api/projects/:id/members/:requestId/reject` - Decline applicant (Protected)
-
-### Notifications (`/api/notifications`)
-- `GET /api/notifications` - Get user notifications (Protected)
-- `PUT /api/notifications/:id/read` - Mark single notification as read (Protected)
-- `PUT /api/notifications/read-all` - Mark all notifications as read (Protected)
-
----
-
-## ☁️ Deploying to Vercel
-
-1. Push this repository to GitHub:
-   ```bash
-   git add .
-   git commit -m "feat: FLEXI Student Skill Exchange Platform complete"
-   git push -u origin master
-   ```
-2. Log in to [Vercel](https://vercel.com) and click **Add New Project**.
-3. Import your GitHub repository (`25070521221-CA-03`).
-4. Set the Environment Variables in the Vercel Dashboard:
-   - `MONGO_URI`: Your MongoDB Atlas connection string (e.g. `mongodb+srv://<user>:<password>@cluster.mongodb.net/flexi`)
-   - `JWT_SECRET`: Any secure random string
-   - `CLIENT_URL`: Your Vercel production URL
-5. Click **Deploy**! Vercel uses `vercel.json` to automatically build the client and serve the API.
-
-### Homepage or refreshed pages return `404 NOT_FOUND`
-
-If `/index.html` and `/api/health` load but `/` or `/login` return 404,
-the frontend service needs a single-page application fallback. The `client`
-service in `vercel.json` first serves existing files (JavaScript, CSS, and
-images), then serves `/index.html` for React Router pages. `/api/*` is routed
-separately to the server service.
-
-Deploy the commit containing this configuration; redeploying an older commit
-will retain the old routing. Keep Vercel's Root Directory at the repository
-root, where `vercel.json`, `client`, and `server` are located. After deployment,
-check `/`, `/login`, a refreshed `/skills` page, and `/api/health`.
-
----
-
-## 🛠️ Common Troubleshooting
-
-1. **Port 5000 Already in Use?**
-   - Change `PORT=5001` in `server/.env` and `VITE_API_URL=http://localhost:5001/api` in `client/.env`.
-2. **MongoDB Connection Warning?**
-   - Make sure MongoDB Compass or `mongod` is running. If not, the application uses an automatic in-memory MongoDB fallback for testing.
-3. **CORS Error?**
-   - Ensure the server is running on port 5000 and client on 5173. The backend is configured to accept requests from localhost:5173 and Vite proxy.
+</div>
