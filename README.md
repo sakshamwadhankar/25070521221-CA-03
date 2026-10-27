@@ -347,6 +347,19 @@ npm run dev
    - `CLIENT_URL`: Your Vercel production URL
 5. Click **Deploy**! Vercel uses `vercel.json` to automatically build the client and serve the API.
 
+### Homepage or refreshed pages return `404 NOT_FOUND`
+
+If `/index.html` and `/api/health` load but `/` or `/login` return 404,
+the frontend service needs a single-page application fallback. The `client`
+service in `vercel.json` first serves existing files (JavaScript, CSS, and
+images), then serves `/index.html` for React Router pages. `/api/*` is routed
+separately to the server service.
+
+Deploy the commit containing this configuration; redeploying an older commit
+will retain the old routing. Keep Vercel's Root Directory at the repository
+root, where `vercel.json`, `client`, and `server` are located. After deployment,
+check `/`, `/login`, a refreshed `/skills` page, and `/api/health`.
+
 ---
 
 ## 🛠️ Common Troubleshooting
