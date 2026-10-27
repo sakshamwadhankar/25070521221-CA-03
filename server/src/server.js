@@ -3,13 +3,12 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-// Load environment variables (local dev only – Vercel uses project env vars)
+// Load .env for local dev (Vercel injects env vars automatically in production)
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const { connectDB } = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
-// Route imports
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const skillRoutes = require('./routes/skillRoutes');
@@ -19,44 +18,40 @@ const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 
-// ─── CORS ────────────────────────────────────────────────────────────────────
-// In production: allow Vercel deployment domains + any custom domain.
-// Locally: allow localhost variants.
+// ─── CORS ─────────────────────────────────────────────────────────────────────
+// Allow all Vercel domains + localhost for dev
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow no-origin (curl / mobile) and all origins in dev
-      if (!origin) return callback(null, true);
-
-      // Allowed patterns
-      const allowed =
-        !origin ||                                         // curl / same-origin
-        origin.startsWith('http://localhost') ||           // local dev
-        origin.startsWith('http://127.0.0.1') ||          // local dev
-        origin.includes('vercel.app') ||                   // Vercel preview & production
-        (process.env.CLIENT_URL && origin === process.env.CLIENT_URL); // custom domain
-
-      return callback(null, allowed ? true : new Error(`CORS blocked: ${origin}`));
+      if (
+        !origin ||
+        origin.startsWith('http://localhost') ||
+        origin.startsWith('http://127.0.0.1') ||
+        origin.includes('vercel.app') ||
+        (process.env.CLIENT_URL && origin === process.env.CLIENT_URL)
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Permissive for student project
     },
     credentials: true,
   })
 );
 
-// ─── Body parsers ─────────────────────────────────────────────────────────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ─── Health check ─────────────────────────────────────────────────────────────
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    platform: 'Edu Exchange – Student Skill Exchange Platform',
+    platform: 'Edu Exchange',
     timestamp: new Date().toISOString(),
     env: process.env.NODE_ENV || 'development',
   });
 });
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/skills', skillRoutes);
@@ -64,39 +59,35 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// ─── Error middleware ─────────────────────────────────────────────────────────
 app.use(notFound);
 app.use(errorHandler);
 
-// ─── Startup ──────────────────────────────────────────────────────────────────
+// ─── Start server ─────────────────────────────────────────────────────────────
+// Always listen — works for both local dev AND Vercel Services (long-running process)
 const PORT = process.env.PORT || 5000;
 
-// Only listen when running directly (local dev).
-// On Vercel, api/index.js exports the app and Vercel manages the HTTP server.
-if (require.main === module) {
-  connectDB()
-    .then(async () => {
+connectDB()
+  .then(async () => {
+    try {
       const User = require('./models/User');
       const { seedData } = require('./utils/seed');
-      try {
-        const userCount = await User.countDocuments();
-        if (userCount === 0) {
-          console.log('🌱 Empty database – auto-seeding initial student data...');
-          await seedData(false);
-        }
-      } catch (seedErr) {
-        console.warn('⚠️ Auto-seed check notice:', seedErr.message);
+      const userCount = await User.countDocuments();
+      if (userCount === 0) {
+        console.log('🌱 Empty database – auto-seeding initial student data...');
+        await seedData(false);
       }
+    } catch (seedErr) {
+      console.warn('⚠️ Auto-seed notice:', seedErr.message);
+    }
 
-      app.listen(PORT, () => {
-        console.log(`🚀 Edu Exchange running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-        console.log(`📡 Health: http://localhost:${PORT}/api/health`);
-      });
-    })
-    .catch((err) => {
-      console.error('❌ Failed to connect to MongoDB:', err.message);
-      process.exit(1);
+    app.listen(PORT, () => {
+      console.log(`🚀 Edu Exchange API running on port ${PORT}`);
+      console.log(`📡 Health: http://localhost:${PORT}/api/health`);
     });
-}
+  })
+  .catch((err) => {
+    console.error('❌ MongoDB connection failed:', err.message);
+    process.exit(1);
+  });
 
 module.exports = app;
