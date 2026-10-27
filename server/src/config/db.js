@@ -1,42 +1,43 @@
 const mongoose = require('mongoose');
 
-let mongoMemoryServer = null;
+// Cache the connection promise so serverless cold-starts reuse the same connection
+let cachedConnection = null;
 
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/flexi';
+  // Return cached connection if already connected
+  if (cachedConnection && mongoose.connection.readyState === 1) {
+    return cachedConnection;
+  }
+
+  const uri = process.env.MONGO_URI;
+
+  if (!uri) {
+    throw new Error(
+      '❌ MONGO_URI environment variable is not set. ' +
+      'Set it in your Vercel project settings (or .env for local dev) ' +
+      'to a MongoDB Atlas connection string: mongodb+srv://...'
+    );
+  }
 
   try {
-    // Attempt standard connection with a short timeout so we know quickly if local mongod is active
-    const conn = await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 2500,
+    cachedConnection = await mongoose.connect(uri, {
+      // These options help with Vercel serverless connection reuse
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
     });
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}/${conn.connection.name}`);
-    return conn;
+    console.log(`✅ MongoDB Connected: ${mongoose.connection.host}/${mongoose.connection.name}`);
+    return cachedConnection;
   } catch (err) {
-    console.warn(`⚠️ Could not connect to primary MongoDB URI (${uri}): ${err.message}`);
-    console.log('🔄 Initializing embedded in-memory MongoDB fallback so you can run immediately without setup...');
-
-    try {
-      const { MongoMemoryServer } = require('mongodb-memory-server');
-      mongoMemoryServer = await MongoMemoryServer.create({
-        instance: { dbName: 'flexi' }
-      });
-      const memUri = mongoMemoryServer.getUri();
-      const conn = await mongoose.connect(memUri);
-      console.log(`✅ In-Memory MongoDB Connected at: ${memUri}`);
-      console.log('ℹ️ Tip: Start MongoDB or MongoDB Compass on mongodb://127.0.0.1:27017/flexi for persistent storage.');
-      return conn;
-    } catch (memErr) {
-      console.error('❌ Failed to connect to both primary and in-memory MongoDB:', memErr.message);
-      process.exit(1);
-    }
+    console.error('❌ MongoDB connection error:', err.message);
+    throw err;
   }
 };
 
 const disconnectDB = async () => {
-  await mongoose.disconnect();
-  if (mongoMemoryServer) {
-    await mongoMemoryServer.stop();
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.disconnect();
+    cachedConnection = null;
   }
 };
 

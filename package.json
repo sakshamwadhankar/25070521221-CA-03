@@ -1,7 +1,7 @@
 {
   "name": "25070521221-ca-03",
   "version": "1.0.0",
-  "description": "FLEXI – Student Skill Exchange Platform",
+  "description": "Edu Exchange – Student Skill Exchange Platform",
   "main": "server/src/server.js",
   "scripts": {
     "install:all": "npm install && npm run install:server && npm run install:client",
@@ -11,14 +11,15 @@
     "client": "cd client && npm run dev",
     "dev": "concurrently --kill-others-on-fail -p \"[{name}]\" -n \"SERVER,CLIENT\" -c \"magenta.bold,cyan.bold\" \"npm run server\" \"npm run client\"",
     "seed": "cd server && npm run seed",
-    "build": "cd client && npm run build"
+    "build": "cd client && npm run build",
+    "vercel-build": "cd client && npm run build"
   },
   "keywords": [
     "student",
     "skill-exchange",
     "mern",
     "collaboration",
-    "flexi"
+    "edu-exchange"
   ],
   "author": "Saksham Wadhankar",
   "license": "MIT",
