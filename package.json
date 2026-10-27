@@ -1,0 +1,28 @@
+{
+  "name": "25070521221-ca-03",
+  "version": "1.0.0",
+  "description": "FLEXI – Student Skill Exchange Platform",
+  "main": "server/src/server.js",
+  "scripts": {
+    "install:all": "npm install && npm run install:server && npm run install:client",
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently --kill-others-on-fail -p \"[{name}]\" -n \"SERVER,CLIENT\" -c \"magenta.bold,cyan.bold\" \"npm run server\" \"npm run client\"",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
+  },
+  "keywords": [
+    "student",
+    "skill-exchange",
+    "mern",
+    "collaboration",
+    "flexi"
+  ],
+  "author": "Saksham Wadhankar",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,66 @@
+import React, { createContext, useContext, useState, useCallback } from 'react';
+
+const ToastContext = createContext(null);
+
+export const ToastProvider = ({ children }) => {
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = useCallback((message, type = 'info', duration = 3500) => {
+    const id = Date.now() + Math.random().toString(36).substring(2, 9);
+    setToasts((prev) => [...prev, { id, message, type }]);
+
+    if (duration > 0) {
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+      }, duration);
+    }
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const toast = {
+    success: (msg, dur) => addToast(msg, 'success', dur),
+    error: (msg, dur) => addToast(msg, 'error', dur),
+    info: (msg, dur) => addToast(msg, 'info', dur),
+    warning: (msg, dur) => addToast(msg, 'warning', dur),
+  };
+
+  return (
+    <ToastContext.Provider value={{ toast, toasts, removeToast }}>
+      {children}
+      {/* Toast Overlay Container */}
+      <div className="toast-container">
+        {toasts.map((t) => (
+          <div key={t.id} className={`toast-item toast-${t.type}`}>
+            <span className="toast-icon">
+              {t.type === 'success' && '✓'}
+              {t.type === 'error' && '✕'}
+              {t.type === 'warning' && '⚠'}
+              {t.type === 'info' && 'ℹ'}
+            </span>
+            <span className="toast-message">{t.message}</span>
+            <button
+              onClick={() => removeToast(t.id)}
+              className="toast-close"
+              aria-label="Close toast"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+      </div>
+    </ToastContext.Provider>
+  );
+};
+
+export const useToast = () => {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+  return context.toast;
+};
+
+export default ToastContext;
