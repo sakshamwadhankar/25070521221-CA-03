@@ -96,55 +96,7 @@ const Sidebar = ({
           </button>
         </div>
 
-        {/* Quick Size Pills: S, M, L (Only when expanded) */}
-        {!isCollapsed && (
-          <div
-            className="sidebar-size-pills"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 12,
-              padding: '4px 8px',
-              background: 'rgba(255, 255, 255, 0.65)',
-              border: '1.5px solid var(--black)',
-              borderRadius: 'var(--radius-sm)',
-            }}
-          >
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700 }}>
-              Width:
-            </span>
-            <div style={{ display: 'flex', gap: 4 }}>
-              <button
-                type="button"
-                onClick={() => onWidthChange && onWidthChange(190)}
-                className="badge-neo badge-neo-white"
-                style={{ cursor: 'pointer', padding: '1px 6px', fontSize: '0.68rem', background: sidebarWidth < 220 ? 'var(--black)' : 'var(--white)', color: sidebarWidth < 220 ? 'var(--white)' : 'var(--black)' }}
-                title="Small sidebar"
-              >
-                S
-              </button>
-              <button
-                type="button"
-                onClick={() => onWidthChange && onWidthChange(250)}
-                className="badge-neo badge-neo-white"
-                style={{ cursor: 'pointer', padding: '1px 6px', fontSize: '0.68rem', background: sidebarWidth >= 220 && sidebarWidth <= 280 ? 'var(--black)' : 'var(--white)', color: sidebarWidth >= 220 && sidebarWidth <= 280 ? 'var(--white)' : 'var(--black)' }}
-                title="Medium/Standard sidebar"
-              >
-                M
-              </button>
-              <button
-                type="button"
-                onClick={() => onWidthChange && onWidthChange(330)}
-                className="badge-neo badge-neo-white"
-                style={{ cursor: 'pointer', padding: '1px 6px', fontSize: '0.68rem', background: sidebarWidth > 280 ? 'var(--black)' : 'var(--white)', color: sidebarWidth > 280 ? 'var(--white)' : 'var(--black)' }}
-                title="Large sidebar"
-              >
-                L
-              </button>
-            </div>
-          </div>
-        )}
+
 
         {/* Middle Navigation Menu - Scrollable if screen height is small */}
         <div className="sidebar-nav-container">
