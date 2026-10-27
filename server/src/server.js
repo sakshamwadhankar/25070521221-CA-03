@@ -48,7 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    platform: 'FLEXI – Student Skill Exchange Platform',
+    platform: 'Edu Exchange – Student Skill Exchange Platform',
     timestamp: new Date().toISOString(),
   });
 });
@@ -84,7 +84,7 @@ if (process.env.VERCEL !== '1' && require.main === module) {
     }
 
     app.listen(PORT, () => {
-      console.log(`🚀 FLEXI Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+      console.log(`🚀 Edu Exchange Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
       console.log(`📡 API Health Check: http://localhost:${PORT}/api/health`);
     });
   });

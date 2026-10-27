@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# FLEXI - Full Stack Startup Script
+# EDU EXCHANGE - Full Stack Startup Script
 # Run this from the project root: .\start.ps1
 
 $MONGOD = "$env:USERPROFILE\.cache\mongodb-binaries\mongod-x64-win32-6.0.14.exe"
@@ -8,7 +8,7 @@ $ROOT   = $PSScriptRoot
 
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "   FLEXI - Student Skill Exchange Platform  " -ForegroundColor Cyan
+Write-Host " EDU EXCHANGE - Student Skill Exchange     " -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -61,12 +61,12 @@ Write-Host "[Frontend] Running at http://localhost:5173 ✓" -ForegroundColor Gr
 
 # 5. Open browser
 Write-Host ""
-Write-Host "Opening FLEXI in your browser..." -ForegroundColor Cyan
+Write-Host "Opening Edu Exchange in your browser..." -ForegroundColor Cyan
 Start-Process "http://localhost:5173"
 
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  FLEXI is live! Press Ctrl+C to stop.     " -ForegroundColor Cyan
+Write-Host " Edu Exchange is live! Press Ctrl+C to stop " -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Frontend : http://localhost:5173" -ForegroundColor White
@@ -85,7 +85,7 @@ try {
     }
 } finally {
     Write-Host ""
-    Write-Host "Shutting down FLEXI..." -ForegroundColor Yellow
+    Write-Host "Shutting down Edu Exchange..." -ForegroundColor Yellow
     Stop-Job $backendJob, $frontendJob -ErrorAction SilentlyContinue
     Remove-Job $backendJob, $frontendJob -ErrorAction SilentlyContinue
     Write-Host "Stopped. Goodbye!" -ForegroundColor Cyan

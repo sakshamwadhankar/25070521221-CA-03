@@ -45,7 +45,6 @@ const Requests = () => {
     fetchRequests();
   }, []);
 
-  // Accept Request
   const handleAccept = async (id) => {
     try {
       await requestService.acceptRequest(id);
@@ -56,7 +55,6 @@ const Requests = () => {
     }
   };
 
-  // Reject Request
   const handleReject = async (id) => {
     try {
       await requestService.rejectRequest(id);
@@ -67,7 +65,6 @@ const Requests = () => {
     }
   };
 
-  // Cancel Request
   const handleCancel = async (id) => {
     try {
       await requestService.cancelRequest(id);
@@ -78,7 +75,6 @@ const Requests = () => {
     }
   };
 
-  // Mark Completed
   const handleComplete = async (id) => {
     try {
       await requestService.completeRequest(id);
@@ -89,7 +85,6 @@ const Requests = () => {
     }
   };
 
-  // Delete Request
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to remove this record?')) return;
     try {
@@ -101,7 +96,6 @@ const Requests = () => {
     }
   };
 
-  // Combine and filter according to activeTab
   const getFilteredRequests = () => {
     const all = [...receivedRequests, ...sentRequests];
 
@@ -125,96 +119,76 @@ const Requests = () => {
   const pendingReceivedCount = receivedRequests.filter((r) => r.status === 'pending').length;
 
   return (
-    <div className="page-container">
-      <div className="container">
-        {/* Header */}
-        <div style={{ marginBottom: 28 }}>
-          <h1 className="section-title">Skill & Project Exchange Requests</h1>
-          <p className="section-subtitle">
-            Manage your peer swap offers, responses, and project collaboration invites
-          </p>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            overflowX: 'auto',
-            paddingBottom: 8,
-            marginBottom: 32,
-            borderBottom: '1px solid var(--border)',
-          }}
-        >
-          {TABS.map((tab) => {
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`btn btn-sm ${isActive ? 'btn-primary' : 'btn-secondary'}`}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: 'var(--radius-full)',
-                  position: 'relative',
-                }}
-              >
-                <span>{tab.icon}</span>
-                <span>{tab.label}</span>
-
-                {/* Badge for Pending Received */}
-                {tab.id === 'received' && pendingReceivedCount > 0 && (
-                  <span
-                    style={{
-                      background: isActive ? '#ffffff' : 'var(--primary)',
-                      color: isActive ? 'var(--primary)' : '#ffffff',
-                      fontSize: '0.72rem',
-                      fontWeight: 800,
-                      padding: '2px 7px',
-                      borderRadius: '999px',
-                      marginLeft: 4,
-                    }}
-                  >
-                    {pendingReceivedCount}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Requests List */}
-        {loading ? (
-          <Loader text="Loading your exchange requests from MongoDB..." />
-        ) : filteredRequests.length === 0 ? (
-          <EmptyState
-            icon="📬"
-            title={`No ${activeTab} requests`}
-            description={
-              activeTab === 'received'
-                ? 'You have no pending requests from classmates. Offer new skills to get noticed!'
-                : activeTab === 'sent'
-                ? "You haven't sent any pending requests. Explore skills to find exchange partners!"
-                : `No requests currently marked as ${activeTab}.`
-            }
-          />
-        ) : (
-          <div className="grid grid-cols-2" style={{ gap: 20 }}>
-            {filteredRequests.map((req) => (
-              <RequestCard
-                key={req._id}
-                request={req}
-                onAccept={handleAccept}
-                onReject={handleReject}
-                onCancel={handleCancel}
-                onComplete={handleComplete}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
-        )}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+      {/* Header */}
+      <div>
+        <h1 style={{ fontSize: '2.2rem', marginBottom: 6 }}>Exchange Requests</h1>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+          Manage your peer swap offers, responses, and collaborative project invites.
+        </p>
       </div>
+
+      {/* Navigation Tabs */}
+      <div className="tabs-neo">
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`tab-neo-btn ${isActive ? 'active' : ''}`}
+              style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+            >
+              <span>{tab.icon}</span>
+              <span>{tab.label}</span>
+
+              {tab.id === 'received' && pendingReceivedCount > 0 && (
+                <span
+                  className="badge-neo badge-neo-pink"
+                  style={{
+                    fontSize: '0.68rem',
+                    padding: '1px 5px',
+                    marginLeft: 4,
+                  }}
+                >
+                  {pendingReceivedCount}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Requests List */}
+      {loading ? (
+        <Loader text="Loading your exchange requests from database..." />
+      ) : filteredRequests.length === 0 ? (
+        <EmptyState
+          icon="📬"
+          title={`No ${activeTab} requests`}
+          description={
+            activeTab === 'received'
+              ? 'You have no pending requests from classmates. Offer new skills to get noticed!'
+              : activeTab === 'sent'
+              ? "You haven't sent any pending requests. Explore skills to find exchange partners!"
+              : `No requests currently marked as ${activeTab}.`
+          }
+        />
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 20 }}>
+          {filteredRequests.map((req) => (
+            <RequestCard
+              key={req._id}
+              request={req}
+              onAccept={handleAccept}
+              onReject={handleReject}
+              onCancel={handleCancel}
+              onComplete={handleComplete}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

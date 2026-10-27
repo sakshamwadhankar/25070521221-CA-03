@@ -77,7 +77,6 @@ const Projects = () => {
     fetchProjects();
   };
 
-  // Open Create Project Modal
   const handleOpenCreateModal = () => {
     if (!isAuthenticated) {
       toast.info('Please log in first to create a student project');
@@ -97,7 +96,6 @@ const Projects = () => {
     setProjectModalOpen(true);
   };
 
-  // Open Edit Project Modal
   const handleOpenEditModal = (project) => {
     setIsEditing(true);
     setEditingProjectId(project._id);
@@ -113,7 +111,6 @@ const Projects = () => {
     setProjectModalOpen(true);
   };
 
-  // Submit Project Form
   const handleSubmitProject = async (e) => {
     e.preventDefault();
     if (!formData.title.trim() || !formData.description.trim()) {
@@ -128,7 +125,7 @@ const Projects = () => {
         toast.success('Project updated successfully!');
       } else {
         await projectService.createProject(formData);
-        toast.success('Project created and listed successfully!');
+        toast.success('Project created on Edu Exchange!');
       }
       setProjectModalOpen(false);
       fetchProjects();
@@ -139,7 +136,6 @@ const Projects = () => {
     }
   };
 
-  // Delete Project
   const handleDeleteProject = async (projectId) => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
     try {
@@ -151,7 +147,6 @@ const Projects = () => {
     }
   };
 
-  // View Project Details
   const handleViewDetails = async (project) => {
     setActiveProject(project);
     setDetailsModalOpen(true);
@@ -170,14 +165,13 @@ const Projects = () => {
     }
   };
 
-  // Open Join Request Modal
   const handleOpenJoin = (project) => {
     if (!isAuthenticated) {
       toast.info('Please log in first to apply to join a project');
       return;
     }
     setProjectToJoin(project);
-    setJoinMessage(`Hi! I saw your "${project.title}" project and would love to collaborate.`);
+    setJoinMessage(`Hi! I saw your "${project.title}" project on Edu Exchange and would love to collaborate.`);
     setJoinModalOpen(true);
   };
 
@@ -188,7 +182,7 @@ const Projects = () => {
     try {
       setSubmittingJoin(true);
       await projectService.joinProject(projectToJoin._id, { message: joinMessage });
-      toast.success('Join request sent to project owner!');
+      toast.success('Join request sent to project lead!');
       setJoinModalOpen(false);
       fetchProjects();
     } catch (err) {
@@ -198,7 +192,6 @@ const Projects = () => {
     }
   };
 
-  // Owner: Accept Applicant
   const handleAcceptApplicant = async (requestId) => {
     try {
       const res = await projectService.acceptJoinRequest(activeProject._id, requestId);
@@ -211,7 +204,6 @@ const Projects = () => {
     }
   };
 
-  // Owner: Reject Applicant
   const handleRejectApplicant = async (requestId) => {
     try {
       await projectService.rejectJoinRequest(activeProject._id, requestId);
@@ -225,150 +217,164 @@ const Projects = () => {
   const isOwnerOfActive = user && activeProject?.owner?._id === user._id;
 
   return (
-    <div className="page-container">
-      <div className="container">
-        {/* Header & Create Project */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 24,
-            flexWrap: 'wrap',
-            gap: 16,
-          }}
-        >
-          <div>
-            <h1 className="section-title">Student Projects & Collaboration</h1>
-            <p className="section-subtitle">
-              Find hackathon teams, academic study groups, and capstone collaborators
-            </p>
-          </div>
-
-          <button onClick={handleOpenCreateModal} className="btn btn-primary">
-            🚀 Create a Project
-          </button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+      {/* Header & Create Project */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        <div>
+          <h1 style={{ fontSize: '2.2rem', marginBottom: 6 }}>Campus Projects & Collaboration</h1>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+            Find hackathon teams, academic capstones, and peer research projects.
+          </p>
         </div>
 
-        {/* Search & Filters */}
-        <div className="card" style={{ padding: '20px 24px', marginBottom: 32 }}>
-          <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: '240px', position: 'relative' }}>
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search projects by title, description, or required skill tags..."
-                className="form-input"
-              />
-              {search && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearch('');
-                    fetchProjects();
-                  }}
-                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-light)' }}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-            <button type="submit" className="btn btn-primary">
-              🔍 Search
-            </button>
-          </form>
+        <button onClick={handleOpenCreateModal} className="btn btn-primary">
+          🚀 Create Project
+        </button>
+      </div>
 
-          {/* Category Filter Pills */}
-          <div style={{ marginBottom: 14 }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', marginRight: 10 }}>
-              Category:
-            </span>
-            <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6 }}>
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  className={`badge ${category === cat ? 'badge-primary' : 'badge-gray'}`}
-                  style={{ cursor: 'pointer', padding: '6px 12px', fontSize: '0.82rem' }}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+      {/* Search & Filters Card */}
+      <div className="card-neo card-neo-mint" style={{ padding: '22px' }}>
+        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: '240px' }}>
+            <input
+              type="text"
+              placeholder="Search projects by title, tech stack, or description..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="form-input-neo"
+              style={{ background: 'var(--white)' }}
+            />
           </div>
+          <button type="submit" className="btn btn-primary" style={{ padding: '0 24px' }}>
+            Filter 🔍
+          </button>
+          {search && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                fetchProjects();
+              }}
+              className="btn btn-secondary btn-sm"
+            >
+              Clear
+            </button>
+          )}
+        </form>
 
-          {/* Status Filter Pills */}
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', marginRight: 10 }}>
-              Status:
-            </span>
+        {/* Category Tabs */}
+        <div style={{ marginBottom: 12 }}>
+          <span className="form-label-neo" style={{ fontSize: '0.74rem', display: 'block', marginBottom: 8 }}>
+            Category:
+          </span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setCategory(cat)}
+                className={`tab-neo-btn ${category === cat ? 'active' : ''}`}
+                style={{ fontSize: '0.78rem', padding: '5px 12px' }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Status Tabs */}
+        <div>
+          <span className="form-label-neo" style={{ fontSize: '0.74rem', display: 'block', marginBottom: 8 }}>
+            Status:
+          </span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {STATUSES.map((st) => (
               <button
                 key={st}
+                type="button"
                 onClick={() => setStatus(st)}
-                className={`badge ${status === st ? 'badge-purple' : 'badge-gray'}`}
-                style={{ cursor: 'pointer', padding: '4px 10px', fontSize: '0.78rem' }}
+                className={`tab-neo-btn ${status === st ? 'active' : ''}`}
+                style={{ fontSize: '0.78rem', padding: '5px 12px' }}
               >
                 {st}
               </button>
             ))}
           </div>
         </div>
-
-        {/* Project Grid */}
-        {loading ? (
-          <Loader text="Loading student projects from MongoDB..." />
-        ) : projects.length === 0 ? (
-          <EmptyState
-            icon="🚀"
-            title="No projects found"
-            description="No student projects currently match your filter criteria. Be the first to start one!"
-            actionText="Start a Project"
-            onAction={handleOpenCreateModal}
-          />
-        ) : (
-          <div className="grid grid-cols-2" style={{ gap: 24 }}>
-            {projects.map((proj) => (
-              <ProjectCard
-                key={proj._id}
-                project={proj}
-                onViewDetails={handleViewDetails}
-                onJoin={handleOpenJoin}
-                onEdit={handleOpenEditModal}
-                onDelete={handleDeleteProject}
-              />
-            ))}
-          </div>
-        )}
       </div>
 
-      {/* Modal: Create or Edit Project */}
+      {/* Project Cards Grid */}
+      {loading ? (
+        <Loader text="Loading projects from database..." />
+      ) : projects.length === 0 ? (
+        <EmptyState
+          icon="🚀"
+          title="No projects found"
+          description="There are no projects matching your filter criteria. Be the first to start a collaboration!"
+          actionText="+ Launch a Project"
+          onAction={handleOpenCreateModal}
+        />
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 20 }}>
+          {projects.map((project) => (
+            <ProjectCard
+              key={project._id}
+              project={project}
+              onViewDetails={handleViewDetails}
+              onJoin={handleOpenJoin}
+              onEdit={handleOpenEditModal}
+              onDelete={handleDeleteProject}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Modal 1: Create or Edit Project */}
       <Modal
         isOpen={projectModalOpen}
         onClose={() => setProjectModalOpen(false)}
-        title={isEditing ? 'Edit Project' : 'Create a Student Collaboration Project'}
+        title={isEditing ? 'Edit Project' : 'Create Student Project'}
+        maxWidth="560px"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setProjectModalOpen(false)}
+              className="btn btn-secondary btn-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmitProject}
+              className="btn btn-primary btn-sm"
+              disabled={submittingProject}
+            >
+              {submittingProject ? 'Saving...' : isEditing ? 'Update Project' : 'Launch Project'}
+            </button>
+          </>
+        }
       >
         <form onSubmit={handleSubmitProject}>
-          <div className="form-group">
-            <label className="form-label">Project Title *</label>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Project Title *</label>
             <input
               type="text"
+              placeholder="e.g. AI Study Companion, Campus Marketplace"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="e.g. AI Study Buddy – Smart Lecture Summarizer"
-              className="form-input"
+              className="form-input-neo"
               required
             />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <div className="form-group">
-              <label className="form-label">Category *</label>
+            <div className="form-group-neo">
+              <label className="form-label-neo">Category</label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="form-select"
+                className="form-input-neo"
               >
                 {CATEGORIES.filter((c) => c !== 'All').map((c) => (
                   <option key={c} value={c}>{c}</option>
@@ -376,14 +382,14 @@ const Projects = () => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Status</label>
+            <div className="form-group-neo">
+              <label className="form-label-neo">Status</label>
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="form-select"
+                className="form-input-neo"
               >
-                <option value="Open">Open</option>
+                <option value="Open">Open (Looking for team)</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
               </select>
@@ -391,101 +397,137 @@ const Projects = () => {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <div className="form-group">
-              <label className="form-label">Max Team Members</label>
+            <div className="form-group-neo">
+              <label className="form-label-neo">Max Team Size</label>
               <input
                 type="number"
                 min="2"
                 max="10"
                 value={formData.maxMembers}
-                onChange={(e) => setFormData({ ...formData, maxMembers: e.target.value })}
-                className="form-input"
+                onChange={(e) => setFormData({ ...formData, maxMembers: parseInt(e.target.value) || 4 })}
+                className="form-input-neo"
               />
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Deadline (Optional)</label>
+            <div className="form-group-neo">
+              <label className="form-label-neo">Target Deadline</label>
               <input
                 type="date"
                 value={formData.deadline}
                 onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                className="form-input"
+                className="form-input-neo"
               />
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Required Skills (comma-separated)</label>
-            <input
-              type="text"
-              value={formData.requiredSkills}
-              onChange={(e) => setFormData({ ...formData, requiredSkills: e.target.value })}
-              placeholder="e.g. Python, NLP, React, Figma"
-              className="form-input"
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Detailed Project Description *</label>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Project Description *</label>
             <textarea
+              placeholder="Describe what your project is about and what you want to achieve..."
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="What are the goals of the project? What technologies are used, and what role are you looking for classmates to fill?"
-              className="form-textarea"
-              rows="4"
+              className="form-input-neo"
+              rows="3"
               required
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
-            <button
-              type="button"
-              onClick={() => setProjectModalOpen(false)}
-              className="btn btn-secondary"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={submittingProject}
-            >
-              {submittingProject ? 'Saving...' : isEditing ? 'Save Changes' : 'Create Project'}
-            </button>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Required Skills (comma separated)</label>
+            <input
+              type="text"
+              placeholder="e.g. React, Node.js, UI/UX, Python"
+              value={formData.requiredSkills}
+              onChange={(e) => setFormData({ ...formData, requiredSkills: e.target.value })}
+              className="form-input-neo"
+            />
           </div>
         </form>
       </Modal>
 
-      {/* Modal: Project Details & Team Roster */}
-      <Modal
-        isOpen={detailsModalOpen}
-        onClose={() => setDetailsModalOpen(false)}
-        title={activeProject?.title || 'Project Details'}
-        maxWidth="680px"
-      >
-        {activeProject && (
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-              <span className="badge badge-purple">{activeProject.category}</span>
-              <span className="badge badge-success">● {activeProject.status}</span>
+      {/* Modal 2: View Project Details & Manage Members */}
+      {activeProject && (
+        <Modal
+          isOpen={detailsModalOpen}
+          onClose={() => setDetailsModalOpen(false)}
+          title={activeProject.title}
+          maxWidth="640px"
+          footer={
+            <>
+              {isOwnerOfActive ? (
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    onClick={() => {
+                      setDetailsModalOpen(false);
+                      handleOpenEditModal(activeProject);
+                    }}
+                    className="btn btn-secondary btn-sm"
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      setDetailsModalOpen(false);
+                      handleDeleteProject(activeProject._id);
+                    }}
+                    className="btn btn-danger btn-sm"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setDetailsModalOpen(false);
+                    handleOpenJoin(activeProject);
+                  }}
+                  className="btn btn-primary btn-sm"
+                >
+                  🚀 Apply to Join Team
+                </button>
+              )}
+              <button
+                onClick={() => setDetailsModalOpen(false)}
+                className="btn btn-secondary btn-sm"
+              >
+                Close
+              </button>
+            </>
+          }
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <span className="badge-neo badge-neo-yellow">{activeProject.category}</span>
+              <span className="badge-neo badge-neo-mint">● {activeProject.status}</span>
               {activeProject.deadline && (
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginLeft: 'auto' }}>
-                  📅 Deadline: {new Date(activeProject.deadline).toLocaleDateString()}
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  📅 Target: {new Date(activeProject.deadline).toLocaleDateString()}
                 </span>
               )}
             </div>
 
-            <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.6, marginBottom: 20 }}>
-              {activeProject.description}
-            </p>
+            <div>
+              <span className="form-label-neo" style={{ fontSize: '0.74rem' }}>Project Lead</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
+                <Avatar name={activeProject.owner?.name} size="sm" />
+                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.92rem' }}>
+                  {activeProject.owner?.name} ({activeProject.owner?.department})
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <span className="form-label-neo" style={{ fontSize: '0.74rem' }}>Description</span>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginTop: 4 }}>
+                {activeProject.description}
+              </p>
+            </div>
 
             {/* Required Skills */}
             {activeProject.requiredSkills && activeProject.requiredSkills.length > 0 && (
-              <div style={{ marginBottom: 20 }}>
-                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>
-                  Required Skills:
-                </span>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              <div>
+                <span className="form-label-neo" style={{ fontSize: '0.74rem' }}>Tech Stack & Required Skills</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
                   {activeProject.requiredSkills.map((sk, idx) => (
                     <span key={idx} className="project-tag">
                       #{sk}
@@ -495,163 +537,134 @@ const Projects = () => {
               </div>
             )}
 
-            {/* Team Members */}
-            <div style={{ marginBottom: 24, padding: '16px', background: 'var(--bg-main)', borderRadius: 'var(--radius-lg)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>
-                  Project Team ({activeProject.members?.length || 1} / {activeProject.maxMembers || 4})
-                </span>
-                <span style={{ fontSize: '0.78rem', color: 'var(--text-light)' }}>
-                  Owner: {activeProject.owner?.name}
-                </span>
+            {/* Team Members List */}
+            <div>
+              <span className="form-label-neo" style={{ fontSize: '0.74rem' }}>
+                Team Members ({activeProject.members?.length || 1} of {activeProject.maxMembers || 4})
+              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 6 }}>
+                {activeProject.members?.map((m) => (
+                  <div
+                    key={m._id || m}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      padding: '8px 12px',
+                      background: 'var(--white)',
+                      border: 'var(--border-black)',
+                      borderRadius: 'var(--radius-sm)',
+                    }}
+                  >
+                    <Avatar name={m.name || 'Member'} size="sm" />
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.86rem', fontWeight: 600 }}>
+                      {m.name || 'Student Member'} {m._id === activeProject.owner?._id ? '(Lead)' : ''}
+                    </span>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {activeProject.members &&
-                  activeProject.members.map((member) => (
+            {/* Join Requests for Project Owner */}
+            {isOwnerOfActive && joinRequests.length > 0 && (
+              <div style={{ borderTop: '2px solid var(--black)', paddingTop: 14 }}>
+                <span className="form-label-neo" style={{ fontSize: '0.76rem', color: 'var(--warm-yellow)' }}>
+                  Pending Applications ({joinRequests.length})
+                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
+                  {joinRequests.map((req) => (
                     <div
-                      key={member._id}
+                      key={req._id}
                       style={{
+                        padding: '10px 14px',
+                        background: 'var(--warm-yellow)',
+                        border: 'var(--border-black)',
+                        borderRadius: 'var(--radius-sm)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        padding: '8px 12px',
-                        background: '#ffffff',
-                        borderRadius: 'var(--radius-md)',
-                        border: '1px solid var(--border)',
+                        gap: 12,
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <Avatar name={member.name} size="sm" />
-                        <div>
-                          <p style={{ fontSize: '0.88rem', fontWeight: 700 }}>{member.name}</p>
-                          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                            {member.department} • {member.year}
-                          </p>
-                        </div>
-                      </div>
-                      {member._id === activeProject.owner?._id ? (
-                        <span className="badge badge-primary" style={{ fontSize: '0.7rem' }}>
-                          Owner
-                        </span>
-                      ) : (
-                        <span className="badge badge-secondary" style={{ fontSize: '0.7rem' }}>
-                          Member
-                        </span>
-                      )}
-                    </div>
-                  ))}
-              </div>
-            </div>
-
-            {/* Owner Section: Review Pending Join Requests */}
-            {isOwnerOfActive && (
-              <div style={{ marginTop: 24, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
-                <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: 12 }}>
-                  Pending Join Applications ({joinRequests.length})
-                </h4>
-
-                {joinRequests.length === 0 ? (
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    No pending join requests for this project.
-                  </p>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {joinRequests.map((req) => (
-                      <div
-                        key={req._id}
-                        style={{
-                          padding: '12px',
-                          border: '1px solid var(--border)',
-                          borderRadius: 'var(--radius-md)',
-                          background: '#ffffff',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <Avatar name={req.sender?.name} size="sm" />
-                            <div>
-                              <p style={{ fontSize: '0.86rem', fontWeight: 700 }}>{req.sender?.name}</p>
-                              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                                {req.sender?.department}
-                              </p>
-                            </div>
-                          </div>
-                          <div style={{ display: 'flex', gap: 6 }}>
-                            <button
-                              onClick={() => handleRejectApplicant(req._id)}
-                              className="btn btn-secondary btn-sm"
-                              style={{ color: 'var(--danger)' }}
-                            >
-                              ✕ Decline
-                            </button>
-                            <button
-                              onClick={() => handleAcceptApplicant(req._id)}
-                              className="btn btn-primary btn-sm"
-                            >
-                              ✓ Accept
-                            </button>
-                          </div>
-                        </div>
-                        <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontStyle: 'italic', background: 'var(--bg-main)', padding: '6px 10px', borderRadius: 'var(--radius-sm)' }}>
-                          "{req.message}"
+                      <div>
+                        <strong style={{ fontFamily: 'var(--font-mono)', fontSize: '0.88rem' }}>
+                          {req.sender?.name}
+                        </strong>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                          {req.message}
                         </p>
                       </div>
-                    ))}
-                  </div>
-                )}
+                      <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                        <button
+                          onClick={() => handleAcceptApplicant(req._id)}
+                          className="btn btn-primary btn-sm"
+                          style={{ padding: '3px 8px' }}
+                        >
+                          ✓ Accept
+                        </button>
+                        <button
+                          onClick={() => handleRejectApplicant(req._id)}
+                          className="btn btn-secondary btn-sm"
+                          style={{ padding: '3px 8px' }}
+                        >
+                          ✕ Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
-        )}
-      </Modal>
+        </Modal>
+      )}
 
-      {/* Modal: Request to Join */}
-      <Modal
-        isOpen={joinModalOpen}
-        onClose={() => setJoinModalOpen(false)}
-        title={`Apply to Join "${projectToJoin?.title}"`}
-      >
-        {projectToJoin && (
-          <form onSubmit={handleSendJoinRequest}>
-            <div style={{ background: 'var(--bg-main)', padding: '14px', borderRadius: 'var(--radius-md)', marginBottom: 16 }}>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Project Owner:</p>
-              <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--primary)' }}>
-                {projectToJoin.owner?.name} ({projectToJoin.owner?.department})
-              </p>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Message to Project Lead *</label>
-              <textarea
-                value={joinMessage}
-                onChange={(e) => setJoinMessage(e.target.value)}
-                className="form-textarea"
-                rows="4"
-                placeholder="Mention why you want to join, your relevant skills, and past experience..."
-                required
-              />
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+      {/* Modal 3: Apply to Join Project */}
+      {projectToJoin && (
+        <Modal
+          isOpen={joinModalOpen}
+          onClose={() => setJoinModalOpen(false)}
+          title={`Join: ${projectToJoin.title}`}
+          maxWidth="480px"
+          footer={
+            <>
               <button
                 type="button"
                 onClick={() => setJoinModalOpen(false)}
-                className="btn btn-secondary"
+                className="btn btn-secondary btn-sm"
               >
                 Cancel
               </button>
               <button
-                type="submit"
-                className="btn btn-primary"
+                type="button"
+                onClick={handleSendJoinRequest}
+                className="btn btn-primary btn-sm"
                 disabled={submittingJoin}
               >
-                {submittingJoin ? 'Sending...' : 'Send Application 🚀'}
+                {submittingJoin ? 'Sending...' : 'Send Application'}
               </button>
+            </>
+          }
+        >
+          <form onSubmit={handleSendJoinRequest}>
+            <div style={{ background: 'var(--white)', border: 'var(--border-black)', padding: '12px', borderRadius: 'var(--radius-sm)', marginBottom: 14 }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem' }}>
+                Project Lead: <strong>{projectToJoin.owner?.name}</strong>
+              </p>
+            </div>
+            <div className="form-group-neo">
+              <label className="form-label-neo">Why do you want to join? (Introduce your skills)</label>
+              <textarea
+                value={joinMessage}
+                onChange={(e) => setJoinMessage(e.target.value)}
+                className="form-input-neo"
+                rows="3"
+                required
+              />
             </div>
           </form>
-        )}
-      </Modal>
+        </Modal>
+      )}
     </div>
   );
 };

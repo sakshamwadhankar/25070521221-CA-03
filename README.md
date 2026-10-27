@@ -1,15 +1,16 @@
-# FLEXI – Student Skill Exchange Platform
+# EDU EXCHANGE – Student Skill Exchange Platform
 
-> **“Learn together. Build together. Grow together.”**
+> **“Share Skills. Build Connections. Grow Together.”**
 
-**FLEXI** is a full-stack student-to-student skill exchange and collaborative project platform designed specifically for college and university campuses. Instead of expensive courses or solo learning, FLEXI empowers students to trade knowledge 1-on-1 (e.g., swapping React coding skills for UI/UX Figma design) and form project teams for hackathons, capstones, and research.
+**Edu Exchange** is a full-stack student-to-student skill exchange and collaborative project platform designed specifically for college and university campuses. Featuring a retro-modern, neo-brutalist editorial design system inspired by academic design panels, Edu Exchange empowers students to trade knowledge 1-on-1 (e.g., swapping React coding skills for UI/UX Figma design) and form project teams for hackathons, capstones, and campus research.
 
 ---
 
 ## 📌 Repository Information
 - **Repository Name**: `25070521221-CA-03`
-- **Platform**: FLEXI
+- **Platform**: EDU EXCHANGE
 - **Architecture**: MERN (React + Express + Node.js + MongoDB)
+- **Design System**: Neo-Brutalist Editorial (Sky Blue, Mint Green, Cream, Warm Yellow, Soft Pink, Peach, Hard Black Shadows)
 - **Deployment Ready**: Local (Windows/Mac/Linux) & Vercel Ready
 
 ---

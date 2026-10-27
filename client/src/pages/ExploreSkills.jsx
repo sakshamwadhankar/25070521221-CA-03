@@ -59,7 +59,7 @@ const ExploreSkills = () => {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch Skills
+  // Fetch Skills from real MongoDB API
   const fetchSkills = async (targetPage = 1, append = false) => {
     try {
       setLoading(true);
@@ -108,7 +108,7 @@ const ExploreSkills = () => {
   // Open Create Skill Modal
   const handleOpenCreateModal = () => {
     if (!isAuthenticated) {
-      toast.info('Please sign in or create an account to list a skill');
+      toast.info('Please sign in to list a skill on Edu Exchange');
       return;
     }
     setIsEditing(false);
@@ -154,7 +154,7 @@ const ExploreSkills = () => {
         toast.success('Skill updated successfully!');
       } else {
         await skillService.createSkill(formData);
-        toast.success('Skill listed successfully!');
+        toast.success('Skill listed on Edu Exchange!');
       }
       setSkillModalOpen(false);
       fetchSkills(1, false);
@@ -188,7 +188,7 @@ const ExploreSkills = () => {
     }
     setSelectedSkill(skill);
     setRequestMessage(
-      `Hi ${skill.offeredBy?.name}! I would love to learn "${skill.name}" from you in exchange for skills from my profile.`
+      `Hi ${skill.offeredBy?.name}! I would love to learn "${skill.name}" from you on Edu Exchange in trade for my skills.`
     );
     setExchangeModalOpen(true);
   };
@@ -217,195 +217,181 @@ const ExploreSkills = () => {
   };
 
   return (
-    <div className="page-container">
-      <div className="container">
-        {/* Page Title & Add Skill Button */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 24,
-            flexWrap: 'wrap',
-            gap: 16,
-          }}
-        >
-          <div>
-            <h1 className="section-title">Explore Student Skills</h1>
-            <p className="section-subtitle">
-              Browse {totalSkills} skills offered by students ready to trade knowledge
-            </p>
-          </div>
-
-          <button onClick={handleOpenCreateModal} className="btn btn-primary">
-            ➕ Add a Skill to Teach
-          </button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+      {/* Top Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        <div>
+          <h1 style={{ fontSize: '2.2rem', marginBottom: 6 }}>Explore Student Skills</h1>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+            Browse {totalSkills} skills offered by students ready to trade knowledge peer-to-peer.
+          </p>
         </div>
 
-        {/* Search & Filter Bar */}
-        <div
-          className="card"
-          style={{
-            padding: '20px 24px',
-            marginBottom: 32,
-            background: '#ffffff',
-            boxShadow: 'var(--shadow-sm)',
-          }}
-        >
-          {/* Search Form */}
-          <form
-            onSubmit={handleSearchSubmit}
-            style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}
-          >
-            <div style={{ flex: 1, minWidth: '240px', position: 'relative' }}>
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by skill name, description, or keyword..."
-                className="form-input"
-              />
-              {search && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearch('');
-                    fetchSkills(1, false);
-                  }}
-                  style={{
-                    position: 'absolute',
-                    right: 12,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: 'var(--text-light)',
-                  }}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-            <button type="submit" className="btn btn-primary">
-              🔍 Search
-            </button>
-          </form>
+        <button onClick={handleOpenCreateModal} className="btn btn-primary">
+          ➕ Offer a Skill
+        </button>
+      </div>
 
-          {/* Category Filter Pills */}
-          <div style={{ marginBottom: 14 }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', marginRight: 10 }}>
-              Category:
-            </span>
-            <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6 }}>
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  className={`badge ${category === cat ? 'badge-primary' : 'badge-gray'}`}
-                  style={{
-                    cursor: 'pointer',
-                    padding: '6px 12px',
-                    fontSize: '0.82rem',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+      {/* Large Search Bar & Filters Card */}
+      <div
+        className="card-neo card-neo-yellow"
+        style={{ padding: '22px' }}
+      >
+        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: 12, marginBottom: 18, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: '240px' }}>
+            <input
+              type="text"
+              placeholder="Search by skill name, topic, or keyword (e.g. React, Figma, Python)..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="form-input-neo"
+              style={{ background: 'var(--white)' }}
+            />
           </div>
+          <button type="submit" className="btn btn-primary" style={{ padding: '0 24px' }}>
+            Search 🔍
+          </button>
+          {search && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                fetchSkills(1, false);
+              }}
+              className="btn btn-secondary btn-sm"
+            >
+              Clear
+            </button>
+          )}
+        </form>
 
-          {/* Level Filter Pills */}
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', marginRight: 10 }}>
-              Skill Level:
-            </span>
+        {/* Category Pills */}
+        <div style={{ marginBottom: 14 }}>
+          <span className="form-label-neo" style={{ fontSize: '0.74rem', display: 'block', marginBottom: 8 }}>
+            Filter by Category:
+          </span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setCategory(cat)}
+                className={`tab-neo-btn ${category === cat ? 'active' : ''}`}
+                style={{ fontSize: '0.78rem', padding: '5px 12px' }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Level Pills */}
+        <div>
+          <span className="form-label-neo" style={{ fontSize: '0.74rem', display: 'block', marginBottom: 8 }}>
+            Proficiency Level:
+          </span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {LEVELS.map((lvl) => (
               <button
                 key={lvl}
+                type="button"
                 onClick={() => setLevel(lvl)}
-                className={`badge ${level === lvl ? 'badge-purple' : 'badge-gray'}`}
-                style={{
-                  cursor: 'pointer',
-                  padding: '4px 10px',
-                  fontSize: '0.78rem',
-                }}
+                className={`tab-neo-btn ${level === lvl ? 'active' : ''}`}
+                style={{ fontSize: '0.78rem', padding: '5px 12px' }}
               >
                 {lvl}
               </button>
             ))}
           </div>
         </div>
-
-        {/* Skills Grid */}
-        {loading && skills.length === 0 ? (
-          <Loader text="Retrieving skills from MongoDB..." />
-        ) : skills.length === 0 ? (
-          <EmptyState
-            icon="💡"
-            title="No skills found matching your filters"
-            description="Try choosing another category, resetting search terms, or be the first to offer a skill in this area!"
-            actionText="Clear Filters"
-            onAction={() => {
-              setSearch('');
-              setCategory('All');
-              setLevel('All');
-            }}
-          />
-        ) : (
-          <>
-            <div className="grid grid-cols-3">
-              {skills.map((skill) => (
-                <SkillCard
-                  key={skill._id}
-                  skill={skill}
-                  onRequest={handleOpenExchange}
-                  onEdit={handleOpenEditModal}
-                  onDelete={handleDeleteSkill}
-                />
-              ))}
-            </div>
-
-            {/* Load More Button */}
-            {page < totalPages && (
-              <div style={{ textAlign: 'center', marginTop: 40 }}>
-                <button
-                  onClick={handleLoadMore}
-                  className="btn btn-secondary btn-lg"
-                  disabled={loading}
-                >
-                  {loading ? 'Loading...' : `Load More Skills (${skills.length} of ${totalSkills})`}
-                </button>
-              </div>
-            )}
-          </>
-        )}
       </div>
 
-      {/* Modal: Add or Edit Skill */}
+      {/* Skills Grid */}
+      {loading && skills.length === 0 ? (
+        <Loader text="Loading marketplace skills from database..." />
+      ) : skills.length === 0 ? (
+        <EmptyState
+          icon="⚡"
+          title="No skills found"
+          description="No students have listed skills matching this search or filter. Try a broader search or list the first one!"
+          actionText="+ Offer This Skill"
+          onAction={handleOpenCreateModal}
+        />
+      ) : (
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
+            {skills.map((skill) => (
+              <SkillCard
+                key={skill._id}
+                skill={skill}
+                onRequest={handleOpenExchange}
+                onEdit={handleOpenEditModal}
+                onDelete={handleDeleteSkill}
+              />
+            ))}
+          </div>
+
+          {/* Load More Button */}
+          {page < totalPages && (
+            <div style={{ textAlign: 'center', marginTop: 24 }}>
+              <button
+                onClick={handleLoadMore}
+                className="btn btn-secondary btn-lg"
+                disabled={loading}
+              >
+                {loading ? 'Loading...' : `Load More Skills (${skills.length} of ${totalSkills}) ➔`}
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Modal 1: Create or Edit Skill */}
       <Modal
         isOpen={skillModalOpen}
         onClose={() => setSkillModalOpen(false)}
-        title={isEditing ? 'Edit Skill Listing' : 'List a New Skill to Teach'}
+        title={isEditing ? 'Edit Skill Listing' : 'List a Skill on Edu Exchange'}
+        maxWidth="540px"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setSkillModalOpen(false)}
+              className="btn btn-secondary btn-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmitSkill}
+              className="btn btn-primary btn-sm"
+              disabled={submitting}
+            >
+              {submitting ? 'Saving...' : isEditing ? 'Update Skill' : 'Publish Skill'}
+            </button>
+          </>
+        }
       >
         <form onSubmit={handleSubmitSkill}>
-          <div className="form-group">
-            <label className="form-label">Skill Name *</label>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Skill Name *</label>
             <input
               type="text"
+              placeholder="e.g. React.js, UI/UX in Figma, Python Data Analysis"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g. Modern React & Hooks"
-              className="form-input"
+              className="form-input-neo"
               required
             />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <div className="form-group">
-              <label className="form-label">Category *</label>
+            <div className="form-group-neo">
+              <label className="form-label-neo">Category</label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="form-select"
+                className="form-input-neo"
               >
                 {CATEGORIES.filter((c) => c !== 'All').map((c) => (
                   <option key={c} value={c}>{c}</option>
@@ -413,12 +399,12 @@ const ExploreSkills = () => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Proficiency Level *</label>
+            <div className="form-group-neo">
+              <label className="form-label-neo">Proficiency Level</label>
               <select
                 value={formData.level}
                 onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                className="form-select"
+                className="form-input-neo"
               >
                 <option value="Beginner">Beginner</option>
                 <option value="Intermediate">Intermediate</option>
@@ -428,108 +414,90 @@ const ExploreSkills = () => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">What do you want to learn in exchange? *</label>
-            <input
-              type="text"
-              value={formData.wantedSkill}
-              onChange={(e) => setFormData({ ...formData, wantedSkill: e.target.value })}
-              placeholder="e.g. Figma UI/UX, Python data science, French conversation..."
-              className="form-input"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Skill Description *</label>
+          <div className="form-group-neo">
+            <label className="form-label-neo">What You Can Teach (Description) *</label>
             <textarea
+              placeholder="Explain what topics or projects you can help a student with..."
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Provide details about what topics you can cover, your background, and hands-on projects you've built..."
-              className="form-textarea"
+              className="form-input-neo"
               rows="3"
               required
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Availability / Preferred Hours</label>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Skill Desired in Exchange *</label>
             <input
               type="text"
-              value={formData.availability}
-              onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
-              placeholder="e.g. Tuesdays 6-8 PM, Saturday mornings"
-              className="form-input"
+              placeholder="e.g. Graphic Design, Docker, Conversational Japanese"
+              value={formData.wantedSkill}
+              onChange={(e) => setFormData({ ...formData, wantedSkill: e.target.value })}
+              className="form-input-neo"
+              required
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
-            <button
-              type="button"
-              onClick={() => setSkillModalOpen(false)}
-              className="btn btn-secondary"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={submitting}
-            >
-              {submitting ? 'Saving...' : isEditing ? 'Save Changes' : 'List Skill'}
-            </button>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Availability / Schedule</label>
+            <input
+              type="text"
+              placeholder="e.g. Weekends, Tuesday evenings, Flexible"
+              value={formData.availability}
+              onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
+              className="form-input-neo"
+            />
           </div>
         </form>
       </Modal>
 
-      {/* Modal: Send Skill Exchange Request */}
+      {/* Modal 2: Send Exchange Request */}
       <Modal
         isOpen={exchangeModalOpen}
         onClose={() => setExchangeModalOpen(false)}
-        title={`Request Exchange with ${selectedSkill?.offeredBy?.name || 'Student'}`}
+        title={`Request Exchange: ${selectedSkill?.name || 'Skill'}`}
+        maxWidth="500px"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setExchangeModalOpen(false)}
+              className="btn btn-secondary btn-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSendExchange}
+              className="btn btn-primary btn-sm"
+              disabled={submittingRequest}
+            >
+              {submittingRequest ? 'Sending...' : 'Send Trade Offer'}
+            </button>
+          </>
+        }
       >
-        {selectedSkill && (
-          <form onSubmit={handleSendExchange}>
-            <div style={{ background: 'var(--bg-main)', padding: '14px', borderRadius: 'var(--radius-md)', marginBottom: 16 }}>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>You want to learn:</p>
-              <p style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--primary)' }}>
-                {selectedSkill.name}
-              </p>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', marginTop: 4 }}>
-                Wanted in exchange: <strong>{selectedSkill.wantedSkill}</strong>
-              </p>
-            </div>
+        <form onSubmit={handleSendExchange}>
+          <div style={{ background: 'var(--cream)', border: 'var(--border-black)', padding: '12px', borderRadius: 'var(--radius-sm)', marginBottom: 14 }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem' }}>
+              Offering to: <strong>{selectedSkill?.offeredBy?.name}</strong> ({selectedSkill?.offeredBy?.department})
+            </p>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>
+              Skill you want: <strong>{selectedSkill?.name}</strong>
+            </p>
+          </div>
 
-            <div className="form-group">
-              <label className="form-label">Personal Message *</label>
-              <textarea
-                value={requestMessage}
-                onChange={(e) => setRequestMessage(e.target.value)}
-                className="form-textarea"
-                rows="4"
-                placeholder="Introduce yourself, mention what you can offer in return, and suggest a meeting time..."
-                required
-              />
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-              <button
-                type="button"
-                onClick={() => setExchangeModalOpen(false)}
-                className="btn btn-secondary"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={submittingRequest}
-              >
-                {submittingRequest ? 'Sending...' : 'Send Request 🚀'}
-              </button>
-            </div>
-          </form>
-        )}
+          <div className="form-group-neo">
+            <label className="form-label-neo">Message to Student</label>
+            <textarea
+              value={requestMessage}
+              onChange={(e) => setRequestMessage(e.target.value)}
+              className="form-input-neo"
+              rows="3"
+              required
+            />
+          </div>
+        </form>
       </Modal>
     </div>
   );

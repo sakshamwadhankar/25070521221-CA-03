@@ -10,27 +10,13 @@ const ProjectCard = ({ project, onViewDetails, onJoin, onEdit, onDelete }) => {
   const isMember = user && project.members?.some((m) => (m._id || m) === user._id);
   const isFull = (project.members?.length || 0) >= (project.maxMembers || 4);
 
-  // Status badge styling
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'Open':
-        return 'badge-success';
-      case 'In Progress':
-        return 'badge-warning';
-      case 'Completed':
-        return 'badge-secondary';
-      default:
-        return 'badge-gray';
-    }
-  };
-
   return (
-    <div className="card card-hover project-card">
+    <div className="card-neo card-neo-white" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <div style={{ flex: 1 }}>
         {/* Category & Status */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-          <span className="badge badge-purple">{project.category}</span>
-          <span className={`badge ${getStatusBadge(project.status)}`}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+          <span className="badge-neo badge-neo-yellow">{project.category}</span>
+          <span className="badge-neo badge-neo-mint">
             ● {project.status}
           </span>
         </div>
@@ -38,10 +24,9 @@ const ProjectCard = ({ project, onViewDetails, onJoin, onEdit, onDelete }) => {
         {/* Title */}
         <h3
           style={{
-            fontSize: '1.2rem',
-            fontWeight: 700,
+            fontSize: '1.25rem',
             marginBottom: 8,
-            color: 'var(--text-main)',
+            color: 'var(--black)',
             cursor: 'pointer',
           }}
           onClick={() => onViewDetails && onViewDetails(project)}
@@ -50,9 +35,9 @@ const ProjectCard = ({ project, onViewDetails, onJoin, onEdit, onDelete }) => {
         </h3>
 
         {/* Description */}
-        <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.45, marginBottom: 14 }}>
-          {project.description?.length > 130
-            ? `${project.description.substring(0, 130)}...`
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.86rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 14 }}>
+          {project.description?.length > 120
+            ? `${project.description.substring(0, 120)}...`
             : project.description}
         </p>
 
@@ -74,21 +59,21 @@ const ProjectCard = ({ project, onViewDetails, onJoin, onEdit, onDelete }) => {
             style={{ display: 'flex', alignItems: 'center', gap: 8 }}
           >
             <Avatar name={project.owner?.name} size="sm" />
-            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem', fontWeight: 700, color: 'var(--black)' }}>
               {project.owner?.name || 'Project Lead'}
             </span>
           </Link>
 
           {project.deadline && (
-            <span style={{ fontSize: '0.76rem', color: 'var(--text-light)', fontWeight: 500 }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-light)', fontWeight: 600 }}>
               📅 {new Date(project.deadline).toLocaleDateString()}
             </span>
           )}
         </div>
 
         {/* Team Members Stack */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border)' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, paddingTop: 10, borderTop: '2px solid var(--black)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <div className="avatar-stack">
               {project.members &&
                 project.members.slice(0, 4).map((member, idx) => (
@@ -99,35 +84,36 @@ const ProjectCard = ({ project, onViewDetails, onJoin, onEdit, onDelete }) => {
                   />
                 ))}
             </div>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', marginLeft: 8 }}>
-              {project.members?.length || 1} / {project.maxMembers || 4} Members
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+              {project.members?.length || 1}/{project.maxMembers || 4} spots
             </span>
           </div>
 
+          {isMember && !isOwner && (
+            <span className="badge-neo badge-neo-mint">Member</span>
+          )}
           {isOwner && (
-            <span className="badge badge-primary" style={{ fontSize: '0.72rem' }}>
-              Project Owner
-            </span>
+            <span className="badge-neo badge-neo-black">Owner</span>
           )}
         </div>
       </div>
 
-      {/* Card Action Buttons */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 16, paddingTop: 12, borderTop: '1px solid var(--border)' }}>
+      {/* Action Buttons */}
+      <div style={{ display: 'flex', gap: 8, marginTop: 16, paddingTop: 12, borderTop: '2px solid var(--black)' }}>
         <button
           onClick={() => onViewDetails && onViewDetails(project)}
           className="btn btn-secondary btn-sm"
+          style={{ flex: 1 }}
         >
-          View Details
+          Details
         </button>
 
         {isOwner ? (
-          <div style={{ display: 'flex', gap: 6 }}>
+          <>
             {onEdit && (
               <button
                 onClick={() => onEdit(project)}
-                className="btn btn-secondary btn-sm"
-                title="Edit Project"
+                className="btn btn-warning btn-sm"
               >
                 ✏️ Edit
               </button>
@@ -135,28 +121,26 @@ const ProjectCard = ({ project, onViewDetails, onJoin, onEdit, onDelete }) => {
             {onDelete && (
               <button
                 onClick={() => onDelete(project._id)}
-                className="btn btn-secondary btn-sm"
-                style={{ color: 'var(--danger)' }}
-                title="Delete Project"
+                className="btn btn-danger btn-sm"
               >
                 🗑️
               </button>
             )}
-          </div>
+          </>
         ) : isMember ? (
-          <span className="badge badge-success" style={{ padding: '6px 12px' }}>
-            ✓ Joined Team
-          </span>
+          <button className="btn btn-secondary btn-sm" disabled>
+            ✓ Joined
+          </button>
         ) : isFull ? (
-          <span className="badge badge-gray" style={{ padding: '6px 12px' }}>
+          <button className="btn btn-secondary btn-sm" disabled>
             Team Full
-          </span>
+          </button>
         ) : (
           <button
             onClick={() => onJoin && onJoin(project)}
             className="btn btn-primary btn-sm"
           >
-            🚀 Request to Join
+            🚀 Apply to Join
           </button>
         )}
       </div>

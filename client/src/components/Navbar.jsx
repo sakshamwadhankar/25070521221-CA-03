@@ -104,8 +104,8 @@ const Navbar = () => {
       <div className="container navbar-inner">
         {/* Brand Logo */}
         <Link to="/" className="brand-logo" onClick={() => setMobileMenuOpen(false)}>
-          <div className="brand-icon">F</div>
-          <span>FLEXI</span>
+          <div className="brand-badge">&lt;/&gt;</div>
+          <span>EDU EXCHANGE</span>
         </Link>
 
         {/* Navigation Links */}

@@ -70,7 +70,6 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validations
     if (!formData.name.trim() || !formData.email.trim() || !formData.password) {
       setError('Please fill in your name, email, and password');
       return;
@@ -91,7 +90,7 @@ const Signup = () => {
 
     try {
       const data = await signup(formData);
-      toast.success(`Welcome to FLEXI, ${data.user?.name || 'Student'}! Your account is ready.`);
+      toast.success(`Welcome to Edu Exchange, ${data.user?.name || 'Student'}! Your account is ready.`);
       navigate('/dashboard', { replace: true });
     } catch (err) {
       setError(err.message || 'Registration failed');
@@ -102,308 +101,317 @@ const Signup = () => {
   };
 
   return (
-    <div className="page-container" style={{ paddingBottom: 60 }}>
-      <div className="container" style={{ maxWidth: '640px' }}>
-        <div className="card" style={{ padding: '36px 32px', boxShadow: 'var(--shadow-xl)' }}>
-          {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <div className="brand-icon" style={{ margin: '0 auto 12px', width: 44, height: 44, fontSize: '1.4rem' }}>
-              F
-            </div>
-            <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: 6 }}>
-              Join the FLEXI Network
-            </h1>
-            <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)' }}>
-              Create your student profile and start trading skills with classmates
-            </p>
+    <div style={{ maxWidth: '680px', margin: '20px auto 40px' }}>
+      <div
+        className="card-neo card-neo-cream"
+        style={{
+          border: 'var(--border-black-thick)',
+          boxShadow: 'var(--shadow-black-xl)',
+          padding: '36px 32px',
+        }}
+      >
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 28 }}>
+          <div
+            className="brand-badge"
+            style={{
+              margin: '0 auto 12px',
+              width: 'fit-content',
+              fontSize: '1.15rem',
+              padding: '6px 14px',
+              background: 'var(--mint-green)',
+            }}
+          >
+            &lt;/&gt; EDU EXCHANGE
           </div>
+          <h1 style={{ fontSize: '2rem', marginBottom: 6 }}>
+            Join Edu Exchange
+          </h1>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+            Share skills. Build connections. Grow together with classmates.
+          </p>
+        </div>
 
-          {/* Error Banner */}
-          {error && (
-            <div
-              style={{
-                background: 'var(--danger-bg)',
-                border: '1px solid var(--danger-border)',
-                color: 'var(--danger)',
-                padding: '10px 14px',
-                borderRadius: 'var(--radius-md)',
-                fontSize: '0.86rem',
-                marginBottom: 20,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
-            >
-              <span>⚠️</span>
-              <span>{error}</span>
-            </div>
-          )}
+        {/* Error Banner */}
+        {error && (
+          <div
+            style={{
+              background: 'var(--soft-pink)',
+              border: 'var(--border-black)',
+              boxShadow: 'var(--shadow-black-sm)',
+              padding: '10px 14px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.84rem',
+              fontWeight: 700,
+              marginBottom: 20,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
 
-          <form onSubmit={handleSubmit}>
-            {/* Full Name & Email */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-name">
-                  Full Name *
-                </label>
-                <input
-                  id="signup-name"
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="e.g. Maya Lin"
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-email">
-                  University / Student Email *
-                </label>
-                <input
-                  id="signup-email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="maya@student.edu"
-                  className="form-input"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Department & Year of Study */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-dept">
-                  Department / Major *
-                </label>
-                <select
-                  id="signup-dept"
-                  name="department"
-                  value={formData.department}
-                  onChange={handleChange}
-                  className="form-select"
-                  required
-                >
-                  {DEPARTMENTS.map((dept) => (
-                    <option key={dept} value={dept}>
-                      {dept}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-year">
-                  Year of Study *
-                </label>
-                <select
-                  id="signup-year"
-                  name="year"
-                  value={formData.year}
-                  onChange={handleChange}
-                  className="form-select"
-                  required
-                >
-                  {YEARS.map((yr) => (
-                    <option key={yr} value={yr}>
-                      {yr}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Password & Confirm Password */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-pass">
-                  Password (min. 6 chars) *
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    id="signup-pass"
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Create password"
-                    className="form-input"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{
-                      position: 'absolute',
-                      right: '12px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      color: 'var(--text-muted)',
-                    }}
-                  >
-                    {showPassword ? '👁️' : '🔒'}
-                  </button>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-confirm-pass">
-                  Confirm Password *
-                </label>
-                <input
-                  id="signup-confirm-pass"
-                  type={showPassword ? 'text' : 'password'}
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Repeat password"
-                  className="form-input"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Bio */}
-            <div className="form-group">
-              <label className="form-label" htmlFor="signup-bio">
-                Short Student Bio
+        <form onSubmit={handleSubmit}>
+          {/* Full Name & Email */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+            <div className="form-group-neo">
+              <label className="form-label-neo" htmlFor="signup-name">
+                Full Name *
               </label>
-              <textarea
-                id="signup-bio"
-                name="bio"
-                value={formData.bio}
+              <input
+                id="signup-name"
+                type="text"
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
-                placeholder="Tell classmates about your academic interests, hobby projects, or what you're passionate about..."
-                className="form-textarea"
-                rows="2"
+                placeholder="e.g. Maya Lin"
+                className="form-input-neo"
+                required
               />
             </div>
 
-            {/* Optional Initial Skill Offering Section */}
-            <div
-              style={{
-                background: 'var(--bg-main)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-lg)',
-                padding: '18px 20px',
-                marginBottom: 24,
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                <span className="badge badge-purple">Optional Quick Start</span>
-                <span style={{ fontWeight: 700, fontSize: '0.92rem' }}>List your first skill trade now</span>
-              </div>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: 14 }}>
-                You can always add, edit, or delete skills anytime later from your dashboard or profile.
-              </p>
+            <div className="form-group-neo">
+              <label className="form-label-neo" htmlFor="signup-email">
+                University Email *
+              </label>
+              <input
+                id="signup-email"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="maya@student.edu"
+                className="form-input-neo"
+                required
+              />
+            </div>
+          </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                <div>
-                  <label className="form-label" style={{ fontSize: '0.82rem' }}>
-                    Skill You Can Teach
-                  </label>
-                  <input
-                    type="text"
-                    name="initialOfferedSkill"
-                    value={formData.initialOfferedSkill}
-                    onChange={handleChange}
-                    placeholder="e.g. Python, UI Design, Guitar"
-                    className="form-input"
-                  />
-                </div>
-
-                <div>
-                  <label className="form-label" style={{ fontSize: '0.82rem' }}>
-                    Skill You Want in Exchange
-                  </label>
-                  <input
-                    type="text"
-                    name="initialWantedSkill"
-                    value={formData.initialWantedSkill}
-                    onChange={handleChange}
-                    placeholder="e.g. React, Algorithms, Spanish"
-                    className="form-input"
-                  />
-                </div>
-              </div>
-
-              {formData.initialOfferedSkill && (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 12 }}>
-                  <div>
-                    <label className="form-label" style={{ fontSize: '0.82rem' }}>
-                      Category
-                    </label>
-                    <select
-                      name="category"
-                      value={formData.category}
-                      onChange={handleChange}
-                      className="form-select"
-                    >
-                      {SKILL_CATEGORIES.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="form-label" style={{ fontSize: '0.82rem' }}>
-                      Proficiency Level
-                    </label>
-                    <select
-                      name="level"
-                      value={formData.level}
-                      onChange={handleChange}
-                      className="form-select"
-                    >
-                      <option value="Beginner">Beginner</option>
-                      <option value="Intermediate">Intermediate</option>
-                      <option value="Advanced">Advanced</option>
-                      <option value="Expert">Expert</option>
-                    </select>
-                  </div>
-                </div>
-              )}
+          {/* Department & Year of Study */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+            <div className="form-group-neo">
+              <label className="form-label-neo" htmlFor="signup-dept">
+                Department / Major *
+              </label>
+              <select
+                id="signup-dept"
+                name="department"
+                value={formData.department}
+                onChange={handleChange}
+                className="form-input-neo"
+                required
+              >
+                {DEPARTMENTS.map((dept) => (
+                  <option key={dept} value={dept}>
+                    {dept}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="btn btn-primary btn-lg"
-              style={{ width: '100%' }}
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <span className="spinner" style={{ width: 20, height: 20, borderWidth: 2 }} />
-                  Creating your account...
-                </>
-              ) : (
-                'Create Student Account ➔'
-              )}
-            </button>
-          </form>
+            <div className="form-group-neo">
+              <label className="form-label-neo" htmlFor="signup-year">
+                Year of Study *
+              </label>
+              <select
+                id="signup-year"
+                name="year"
+                value={formData.year}
+                onChange={handleChange}
+                className="form-input-neo"
+                required
+              >
+                {YEARS.map((yr) => (
+                  <option key={yr} value={yr}>
+                    {yr}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-          {/* Footer Link */}
-          <p
+          {/* Password & Confirm Password */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+            <div className="form-group-neo">
+              <label className="form-label-neo" htmlFor="signup-pass">
+                Password (min. 6 chars) *
+              </label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  id="signup-pass"
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Create password"
+                  className="form-input-neo"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {showPassword ? '👁️' : '🔒'}
+                </button>
+              </div>
+            </div>
+
+            <div className="form-group-neo">
+              <label className="form-label-neo" htmlFor="signup-confirm-pass">
+                Confirm Password *
+              </label>
+              <input
+                id="signup-confirm-pass"
+                type={showPassword ? 'text' : 'password'}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Repeat password"
+                className="form-input-neo"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Bio */}
+          <div className="form-group-neo">
+            <label className="form-label-neo" htmlFor="signup-bio">
+              Short Student Bio
+            </label>
+            <textarea
+              id="signup-bio"
+              name="bio"
+              value={formData.bio}
+              onChange={handleChange}
+              placeholder="Tell classmates about your academic interests, projects, or what you're passionate about..."
+              className="form-input-neo"
+              rows="2"
+            />
+          </div>
+
+          {/* Optional Initial Skill Offering Section (Warm Yellow card) */}
+          <div
             style={{
-              textAlign: 'center',
-              fontSize: '0.9rem',
-              color: 'var(--text-muted)',
-              marginTop: 22,
+              background: 'var(--warm-yellow)',
+              border: 'var(--border-black)',
+              borderRadius: 'var(--radius-sm)',
+              boxShadow: 'var(--shadow-black-sm)',
+              padding: '18px 20px',
+              marginBottom: 24,
             }}
           >
-            Already have an account?{' '}
-            <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 700 }}>
-              Sign In
-            </Link>
-          </p>
-        </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <span className="badge-neo badge-neo-black">Optional Quick Start</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.88rem' }}>List your first skill trade now</span>
+            </div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 14 }}>
+              You can always add, edit, or remove skills anytime from your student dashboard.
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+              <div>
+                <label className="form-label-neo" style={{ fontSize: '0.76rem' }}>
+                  Skill You Can Teach
+                </label>
+                <input
+                  type="text"
+                  name="initialOfferedSkill"
+                  value={formData.initialOfferedSkill}
+                  onChange={handleChange}
+                  placeholder="e.g. Python, UI Design, Guitar"
+                  className="form-input-neo"
+                />
+              </div>
+
+              <div>
+                <label className="form-label-neo" style={{ fontSize: '0.76rem' }}>
+                  Skill Wanted in Exchange
+                </label>
+                <input
+                  type="text"
+                  name="initialWantedSkill"
+                  value={formData.initialWantedSkill}
+                  onChange={handleChange}
+                  placeholder="e.g. React, Algorithms, Spanish"
+                  className="form-input-neo"
+                />
+              </div>
+            </div>
+
+            {formData.initialOfferedSkill && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 12 }}>
+                <div>
+                  <label className="form-label-neo" style={{ fontSize: '0.76rem' }}>
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="form-input-neo"
+                  >
+                    {SKILL_CATEGORIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label-neo" style={{ fontSize: '0.76rem' }}>
+                    Proficiency Level
+                  </label>
+                  <select
+                    name="level"
+                    value={formData.level}
+                    onChange={handleChange}
+                    className="form-input-neo"
+                  >
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Expert">Expert</option>
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="btn btn-primary btn-lg"
+            style={{ width: '100%', fontSize: '0.96rem' }}
+            disabled={loading}
+          >
+            {loading ? 'Creating your account...' : 'Create Student Account ➔'}
+          </button>
+        </form>
+
+        {/* Footer Link */}
+        <p
+          style={{
+            textAlign: 'center',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.86rem',
+            marginTop: 22,
+          }}
+        >
+          Already have an account?{' '}
+          <Link to="/login" style={{ fontWeight: 700, textDecoration: 'underline' }}>
+            Sign In
+          </Link>
+        </p>
       </div>
     </div>
   );

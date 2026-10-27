@@ -16,44 +16,25 @@ const RequestCard = ({
   const isSender = user && request.sender?._id === user._id;
   const isReceiver = user && request.receiver?._id === user._id;
 
-  // Status badge style
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'pending':
-        return 'badge-warning';
-      case 'accepted':
-        return 'badge-success';
-      case 'rejected':
-        return 'badge-danger';
-      case 'cancelled':
-        return 'badge-gray';
-      case 'completed':
-        return 'badge-primary';
-      default:
-        return 'badge-gray';
-    }
-  };
-
   const isSkillExchange = request.requestType === 'skill-exchange';
 
   return (
-    <div className="card request-card">
+    <div className="card-neo card-neo-white" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {/* Header: Request Type & Status */}
-      <div className="request-card-header">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10, borderBottom: '2px solid var(--black)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span className="badge badge-purple">
+          <span className="badge-neo badge-neo-yellow">
             {isSkillExchange ? '🤝 Skill Exchange' : '🚀 Project Join'}
           </span>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-light)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-light)' }}>
             {new Date(request.createdAt).toLocaleDateString([], {
               month: 'short',
               day: 'numeric',
-              year: 'numeric',
             })}
           </span>
         </div>
 
-        <span className={`badge ${getStatusBadge(request.status)}`}>
+        <span className={`badge-neo ${request.status === 'accepted' ? 'badge-neo-mint' : request.status === 'completed' ? 'badge-neo-yellow' : request.status === 'pending' ? 'badge-neo-peach' : 'badge-neo-white'}`}>
           ● {request.status.toUpperCase()}
         </span>
       </div>
@@ -67,14 +48,14 @@ const RequestCard = ({
         >
           <Avatar name={request.sender?.name} size="sm" />
           <div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-light)', display: 'block' }}>From</span>
-            <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-light)', display: 'block' }}>From</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.86rem', fontWeight: 700, color: 'var(--black)' }}>
               {request.sender?.name} {isSender ? '(You)' : ''}
             </span>
           </div>
         </Link>
 
-        <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '1.1rem' }}>➔</span>
+        <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--black)', fontWeight: 700, fontSize: '1.2rem' }}>➔</span>
 
         {/* Receiver */}
         <Link
@@ -83,8 +64,8 @@ const RequestCard = ({
         >
           <Avatar name={request.receiver?.name} size="sm" />
           <div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-light)', display: 'block' }}>To</span>
-            <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-light)', display: 'block' }}>To</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.86rem', fontWeight: 700, color: 'var(--black)' }}>
               {request.receiver?.name} {isReceiver ? '(You)' : ''}
             </span>
           </div>
@@ -93,86 +74,67 @@ const RequestCard = ({
 
       {/* Exchange Details */}
       {isSkillExchange ? (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, background: 'var(--bg-main)', padding: '10px 14px', borderRadius: 'var(--radius-md)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, background: 'var(--cream)', padding: '10px 14px', border: 'var(--border-black)', borderRadius: 'var(--radius-sm)' }}>
           <div>
-            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase' }}>Offered Skill</span>
-            <p style={{ fontSize: '0.86rem', fontWeight: 600, color: 'var(--text-main)', marginTop: 2 }}>
+            <span className="form-label-neo" style={{ fontSize: '0.68rem', display: 'block' }}>Offered Skill</span>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem', fontWeight: 700, color: 'var(--black)', marginTop: 2 }}>
               💡 {request.offeredSkill || 'Exchange offer'}
             </p>
           </div>
           <div>
-            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase' }}>Wanted Skill</span>
-            <p style={{ fontSize: '0.86rem', fontWeight: 600, color: 'var(--text-main)', marginTop: 2 }}>
-              🎯 {request.wantedSkill || 'Requested skill'}
+            <span className="form-label-neo" style={{ fontSize: '0.68rem', display: 'block' }}>Wanted Skill</span>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem', fontWeight: 700, color: 'var(--black)', marginTop: 2 }}>
+              🎯 {request.wantedSkill || 'Skill desired'}
             </p>
           </div>
         </div>
       ) : (
-        <div style={{ background: 'var(--bg-main)', padding: '10px 14px', borderRadius: 'var(--radius-md)' }}>
-          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase' }}>Project Applied For</span>
-          <p style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--primary)', marginTop: 2 }}>
-            📂 {request.projectId?.title || 'Student Project'}
+        <div style={{ background: 'var(--cream)', padding: '10px 14px', border: 'var(--border-black)', borderRadius: 'var(--radius-sm)' }}>
+          <span className="form-label-neo" style={{ fontSize: '0.68rem', display: 'block' }}>Target Project</span>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.86rem', fontWeight: 700, color: 'var(--black)', marginTop: 2 }}>
+            📁 {request.project?.title || 'Project Application'}
           </p>
         </div>
       )}
 
-      {/* Message */}
-      <div className="request-message-box">
-        <p style={{ fontSize: '0.86rem', fontStyle: 'italic' }}>
+      {/* Message Note */}
+      {request.message && (
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--text-muted)', background: 'var(--white)', padding: '8px 12px', border: '1.5px solid var(--black)', borderRadius: 'var(--radius-sm)' }}>
           "{request.message}"
         </p>
-      </div>
+      )}
 
-      {/* Actions based on role and request status */}
-      <div className="request-actions">
-        {/* If Receiver & Pending: Accept or Reject */}
+      {/* Action Buttons */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, paddingTop: 10, borderTop: '2px solid var(--black)', flexWrap: 'wrap' }}>
+        {/* Receiver actions when Pending */}
         {isReceiver && request.status === 'pending' && (
           <>
-            <button
-              onClick={() => onReject && onReject(request._id)}
-              className="btn btn-secondary btn-sm"
-              style={{ color: 'var(--danger)' }}
-            >
-              ✕ Decline
+            <button onClick={() => onAccept && onAccept(request._id)} className="btn btn-primary btn-sm">
+              ✓ Accept
             </button>
-            <button
-              onClick={() => onAccept && onAccept(request._id)}
-              className="btn btn-primary btn-sm"
-            >
-              ✓ Accept Request
+            <button onClick={() => onReject && onReject(request._id)} className="btn btn-danger btn-sm">
+              ✕ Decline
             </button>
           </>
         )}
 
-        {/* If Sender & Pending: Cancel */}
+        {/* Sender actions when Pending */}
         {isSender && request.status === 'pending' && (
-          <button
-            onClick={() => onCancel && onCancel(request._id)}
-            className="btn btn-secondary btn-sm"
-          >
+          <button onClick={() => onCancel && onCancel(request._id)} className="btn btn-secondary btn-sm">
             Cancel Request
           </button>
         )}
 
-        {/* If Accepted: Mark as Completed */}
+        {/* Both when Accepted: Can mark Completed */}
         {request.status === 'accepted' && (
-          <button
-            onClick={() => onComplete && onComplete(request._id)}
-            className="btn btn-primary btn-sm"
-            style={{ background: 'var(--success)' }}
-          >
-            ⭐ Mark Exchange Completed
+          <button onClick={() => onComplete && onComplete(request._id)} className="btn btn-warning btn-sm">
+            ⭐ Mark Completed
           </button>
         )}
 
-        {/* If Rejected, Cancelled, or Completed: Can remove */}
-        {['rejected', 'cancelled', 'completed'].includes(request.status) && onDelete && (
-          <button
-            onClick={() => onDelete(request._id)}
-            className="btn btn-secondary btn-sm"
-            style={{ color: 'var(--text-muted)' }}
-            title="Delete this record"
-          >
+        {/* Remove history */}
+        {(request.status === 'rejected' || request.status === 'cancelled' || request.status === 'completed') && (
+          <button onClick={() => onDelete && onDelete(request._id)} className="btn btn-secondary btn-sm" title="Remove record">
             🗑️ Remove
           </button>
         )}

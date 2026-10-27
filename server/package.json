@@ -1,7 +1,7 @@
 {
-  "name": "flexi-server",
+  "name": "edu-exchange-server",
   "version": "1.0.0",
-  "description": "Backend API for FLEXI Student Skill Exchange Platform",
+  "description": "Backend API for Edu Exchange Student Skill Exchange Platform",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

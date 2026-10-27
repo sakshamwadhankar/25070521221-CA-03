@@ -65,7 +65,6 @@ const Profile = () => {
   const [requestMessage, setRequestMessage] = useState('');
   const [submittingRequest, setSubmittingRequest] = useState(false);
 
-  // Determine if viewing own profile
   const isOwnProfile = !id || (currentUser && id === currentUser._id);
   const targetUserId = id || currentUser?._id;
 
@@ -102,7 +101,6 @@ const Profile = () => {
     fetchProfile();
   }, [id, currentUser?._id]);
 
-  // Handle Edit Profile Submission
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     try {
@@ -121,7 +119,6 @@ const Profile = () => {
     }
   };
 
-  // Handle Add Skill from Profile
   const handleAddSkill = async (e) => {
     e.preventDefault();
     if (!newSkillForm.name.trim() || !newSkillForm.description.trim() || !newSkillForm.wantedSkill.trim()) {
@@ -150,7 +147,6 @@ const Profile = () => {
     }
   };
 
-  // Handle Delete Skill
   const handleDeleteSkill = async (skillId) => {
     if (!window.confirm('Are you sure you want to remove this skill?')) return;
     try {
@@ -162,7 +158,6 @@ const Profile = () => {
     }
   };
 
-  // Handle Exchange Request
   const handleOpenExchange = (skill) => {
     if (!isAuthenticated) {
       toast.info('Please log in first to send a request');
@@ -197,228 +192,268 @@ const Profile = () => {
   };
 
   if (loading) {
-    return (
-      <div className="page-container">
-        <div className="container">
-          <Loader text="Loading student profile from MongoDB..." fullScreen />
-        </div>
-      </div>
-    );
+    return <Loader text="Loading student profile from database..." fullScreen />;
   }
 
   if (!profileUser) {
     return (
-      <div className="page-container">
-        <div className="container">
-          <EmptyState
-            icon="👤"
-            title="Student Profile Not Found"
-            description="The profile you're looking for does not exist or may have been deleted."
-            actionText="Browse Students & Skills"
-            onAction={() => navigate('/skills')}
-          />
-        </div>
-      </div>
+      <EmptyState
+        icon="👤"
+        title="Student Profile Not Found"
+        description="The profile you're looking for does not exist or may have been deleted."
+        actionText="Browse Students & Skills"
+        onAction={() => navigate('/skills')}
+      />
     );
   }
 
   return (
-    <div className="page-container">
-      <div className="container" style={{ maxWidth: '1080px' }}>
-        {/* Profile Banner Card */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
+      {/* Student Profile Header (Directly matching Yellow Trainer Info panel from reference) */}
+      <div>
+        <h2 style={{ fontSize: '1.9rem', marginBottom: 14 }}>Student info</h2>
         <div
-          className="card"
+          className="card-neo card-neo-yellow"
           style={{
-            padding: '36px',
-            marginBottom: 36,
-            background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
-            boxShadow: 'var(--shadow-md)',
+            border: 'var(--border-black-thick)',
+            boxShadow: 'var(--shadow-black-xl)',
+            padding: '32px 28px',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 24,
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-              <Avatar name={profileUser.name} size="xl" />
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4, flexWrap: 'wrap' }}>
-                  <h1 style={{ fontSize: '1.85rem', fontWeight: 800 }}>{profileUser.name}</h1>
-                  {isOwnProfile && <span className="badge badge-primary">You</span>}
-                  <span className="badge badge-success">
-                    ⭐ {profileUser.completedExchanges || 0} Exchanges Completed
-                  </span>
+          <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+            {/* Avatar block with thick black border */}
+            <div
+              style={{
+                width: 100,
+                height: 100,
+                border: 'var(--border-black-thick)',
+                borderRadius: 'var(--radius-sm)',
+                background: 'var(--white)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2.5rem',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                boxShadow: 'var(--shadow-black-sm)',
+                flexShrink: 0,
+              }}
+            >
+              {profileUser.name?.substring(0, 2).toUpperCase() || 'ST'}
+            </div>
+
+            <div style={{ flex: 1, minWidth: '260px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <h1 style={{ fontSize: '1.85rem', margin: 0 }}>{profileUser.name}</h1>
+                    {isOwnProfile && <span className="badge-neo badge-neo-black">You</span>}
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.86rem', color: 'var(--text-muted)', marginTop: 4 }}>
+                    {profileUser.email}
+                  </div>
                 </div>
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                  🏫 {profileUser.department} • 🎓 {profileUser.year}
-                </p>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-light)', marginTop: 4 }}>
-                  ✉️ {profileUser.email}
-                </p>
+
+                {/* Social/Tag pills */}
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  <span className="badge-neo badge-neo-white">🎓 {profileUser.department}</span>
+                  <span className="badge-neo badge-neo-white">📅 {profileUser.year}</span>
+                </div>
+              </div>
+
+              {/* 4 Metric Sub-blocks (Exact look as in reference) */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
+                  gap: 10,
+                  marginTop: 18,
+                  marginBottom: 18,
+                }}
+              >
+                <div className="stat-subblock">
+                  <div className="stat-subblock-num">{profileUser.skills?.length || 0}</div>
+                  <div className="stat-subblock-label">Skills Taught</div>
+                </div>
+                <div className="stat-subblock">
+                  <div className="stat-subblock-num">{profileUser.wantedSkills?.length || 2}</div>
+                  <div className="stat-subblock-label">Wants To Learn</div>
+                </div>
+                <div className="stat-subblock">
+                  <div className="stat-subblock-num">{profileUser.completedExchanges || 0}</div>
+                  <div className="stat-subblock-label">Trades Done</div>
+                </div>
+                <div className="stat-subblock">
+                  <div className="stat-subblock-num">{userProjects.length}</div>
+                  <div className="stat-subblock-label">Campus Projects</div>
+                </div>
+              </div>
+
+              {/* Bio */}
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.55 }}>
+                {profileUser.bio || 'College student trading real skills on Edu Exchange. Interested in hands-on peer collaboration.'}
+              </p>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
+                {isOwnProfile ? (
+                  <>
+                    <button onClick={() => setEditModalOpen(true)} className="btn btn-primary">
+                      ✏️ Edit Profile
+                    </button>
+                    <button onClick={() => setAddSkillModalOpen(true)} className="btn btn-secondary">
+                      ➕ Add Skill Listing
+                    </button>
+                  </>
+                ) : (
+                  profileUser.skills && profileUser.skills.length > 0 && (
+                    <button
+                      onClick={() => handleOpenExchange(profileUser.skills[0])}
+                      className="btn btn-primary"
+                    >
+                      🤝 Request Exchange Session
+                    </button>
+                  )
+                )}
               </div>
             </div>
-
-            {/* Edit Profile Button */}
-            {isOwnProfile ? (
-              <button
-                onClick={() => setEditModalOpen(true)}
-                className="btn btn-secondary"
-              >
-                ✏️ Edit Profile
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  if (profileUser.offeredSkills && profileUser.offeredSkills.length > 0) {
-                    handleOpenExchange(profileUser.offeredSkills[0]);
-                  } else {
-                    toast.info(`${profileUser.name} does not have any active skills listed yet.`);
-                  }
-                }}
-                className="btn btn-primary"
-              >
-                🤝 Request Skill Exchange
-              </button>
-            )}
-          </div>
-
-          {/* Bio */}
-          <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)' }}>
-            <h4 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-light)', textTransform: 'uppercase', marginBottom: 8 }}>
-              About
-            </h4>
-            <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
-              {profileUser.bio || 'This student hasn’t added a bio yet.'}
-            </p>
           </div>
         </div>
+      </div>
 
-        {/* Section: Skills the Student Can Teach */}
-        <div style={{ marginBottom: 44 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <div>
-              <h2 className="section-title" style={{ fontSize: '1.45rem' }}>
-                Skills {isOwnProfile ? 'You Can Teach' : `${profileUser.name.split(' ')[0]} Can Teach`}
-              </h2>
-              <p className="section-subtitle">
-                {profileUser.offeredSkills?.length || 0} skills listed
-              </p>
-            </div>
-
-            {isOwnProfile && (
-              <button
-                onClick={() => setAddSkillModalOpen(true)}
-                className="btn btn-primary btn-sm"
-              >
-                ➕ Add Skill
-              </button>
-            )}
+      {/* Skills Offered (I Can Teach) */}
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+          <div>
+            <h2 style={{ fontSize: '1.8rem', margin: 0 }}>Skills I can teach</h2>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem', color: 'var(--text-muted)' }}>
+              Skills offered by {profileUser.name} on the marketplace
+            </p>
           </div>
-
-          {!profileUser.offeredSkills || profileUser.offeredSkills.length === 0 ? (
-            <EmptyState
-              icon="💡"
-              title="No skills listed yet"
-              description={
-                isOwnProfile
-                  ? 'Share what you know with fellow students! Add your first skill.'
-                  : `${profileUser.name} hasn't listed any skills yet.`
-              }
-              actionText={isOwnProfile ? 'Add a Skill' : null}
-              onAction={isOwnProfile ? () => setAddSkillModalOpen(true) : null}
-            />
-          ) : (
-            <div className="grid grid-cols-3">
-              {profileUser.offeredSkills.map((skill) => (
-                <SkillCard
-                  key={skill._id}
-                  skill={{ ...skill, offeredBy: profileUser }}
-                  onRequest={!isOwnProfile ? handleOpenExchange : null}
-                  onDelete={isOwnProfile ? handleDeleteSkill : null}
-                />
-              ))}
-            </div>
+          {isOwnProfile && (
+            <button onClick={() => setAddSkillModalOpen(true)} className="btn btn-secondary btn-sm">
+              + New Skill
+            </button>
           )}
         </div>
 
-        {/* Section: Projects Joined / Created */}
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <div>
-              <h2 className="section-title" style={{ fontSize: '1.45rem' }}>
-                Projects ({userProjects.length})
-              </h2>
-              <p className="section-subtitle">
-                Student collaboration squads and hackathon teams
-              </p>
-            </div>
+        {profileUser.skills && profileUser.skills.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
+            {profileUser.skills.map((skill) => (
+              <SkillCard
+                key={skill._id}
+                skill={{ ...skill, offeredBy: profileUser }}
+                onRequest={handleOpenExchange}
+                onDelete={isOwnProfile ? handleDeleteSkill : undefined}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="card-neo card-neo-white" style={{ textAlign: 'center', padding: '36px 20px' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+              {isOwnProfile ? 'You haven’t listed any skills yet. Share what you know!' : 'No skills listed yet.'}
+            </p>
             {isOwnProfile && (
-              <button
-                onClick={() => navigate('/projects')}
-                className="btn btn-secondary btn-sm"
-              >
-                Browse All Projects ➔
+              <button onClick={() => setAddSkillModalOpen(true)} className="btn btn-primary btn-sm" style={{ marginTop: 12 }}>
+                + Offer Your First Skill
               </button>
             )}
           </div>
+        )}
+      </div>
 
-          {userProjects.length === 0 ? (
-            <EmptyState
-              icon="🚀"
-              title="No collaborative projects joined"
-              description={
-                isOwnProfile
-                  ? 'You haven’t joined any student projects yet. Find one today!'
-                  : `${profileUser.name} hasn't joined any projects yet.`
-              }
-              actionText={isOwnProfile ? 'Explore Projects' : null}
-              onAction={isOwnProfile ? () => navigate('/projects') : null}
-            />
-          ) : (
-            <div className="grid grid-cols-2" style={{ gap: 20 }}>
-              {userProjects.map((proj) => (
-                <ProjectCard
-                  key={proj._id}
-                  project={proj}
-                  onViewDetails={() => navigate('/projects')}
-                />
+      {/* Skills Desired (I Want to Learn) */}
+      <div>
+        <h2 style={{ fontSize: '1.8rem', marginBottom: 12 }}>Skills I want to learn</h2>
+        <div className="card-neo card-neo-mint" style={{ padding: '22px' }}>
+          {profileUser.wantedSkills && profileUser.wantedSkills.length > 0 ? (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+              {profileUser.wantedSkills.map((wanted, idx) => (
+                <span
+                  key={idx}
+                  className="badge-neo badge-neo-white"
+                  style={{ fontSize: '0.85rem', padding: '6px 14px' }}
+                >
+                  🎯 {wanted}
+                </span>
               ))}
             </div>
+          ) : (
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.86rem', color: 'var(--text-muted)' }}>
+              Open to discovering new peer recommendations and tech stacks.
+            </p>
           )}
         </div>
       </div>
 
-      {/* Modal: Edit Profile */}
+      {/* Projects Section */}
+      <div>
+        <h2 style={{ fontSize: '1.8rem', marginBottom: 14 }}>Projects & Collaborations</h2>
+        {userProjects && userProjects.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
+            {userProjects.map((project) => (
+              <ProjectCard key={project._id} project={project} />
+            ))}
+          </div>
+        ) : (
+          <div className="card-neo card-neo-white" style={{ textAlign: 'center', padding: '32px 20px' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+              No campus projects joined yet.
+            </p>
+            {isOwnProfile && (
+              <button onClick={() => navigate('/projects')} className="btn btn-primary btn-sm" style={{ marginTop: 10 }}>
+                Explore Student Projects ➔
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Edit Profile Modal */}
       <Modal
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}
-        title="Edit Your Student Profile"
+        title="Edit Student Profile"
+        maxWidth="520px"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setEditModalOpen(false)}
+              className="btn btn-secondary btn-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveProfile}
+              className="btn btn-primary btn-sm"
+              disabled={savingProfile}
+            >
+              {savingProfile ? 'Saving...' : 'Save Profile Changes'}
+            </button>
+          </>
+        }
       >
         <form onSubmit={handleSaveProfile}>
-          <div className="form-group">
-            <label className="form-label">Full Name *</label>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Full Name</label>
             <input
               type="text"
               value={editForm.name}
               onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-              className="form-input"
+              className="form-input-neo"
               required
             />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <div className="form-group">
-              <label className="form-label">Department *</label>
+            <div className="form-group-neo">
+              <label className="form-label-neo">Department</label>
               <select
                 value={editForm.department}
                 onChange={(e) => setEditForm({ ...editForm, department: e.target.value })}
-                className="form-select"
-                required
+                className="form-input-neo"
               >
                 {DEPARTMENTS.map((dept) => (
                   <option key={dept} value={dept}>{dept}</option>
@@ -426,189 +461,133 @@ const Profile = () => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Year of Study *</label>
-              <select
+            <div className="form-group-neo">
+              <label className="form-label-neo">Year of Study</label>
+              <input
+                type="text"
                 value={editForm.year}
                 onChange={(e) => setEditForm({ ...editForm, year: e.target.value })}
-                className="form-select"
-                required
-              >
-                {['1st Year (Freshman)', '2nd Year (Sophomore)', '3rd Year (Junior)', '4th Year (Senior)', 'Postgraduate', 'PhD'].map((y) => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
+                placeholder="e.g. 3rd Year (Junior)"
+                className="form-input-neo"
+              />
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Bio</label>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Student Bio</label>
             <textarea
               value={editForm.bio}
               onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
-              className="form-textarea"
-              rows="4"
-              placeholder="Tell others what you are studying, your interests, and what you love building..."
+              className="form-input-neo"
+              rows="3"
             />
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
-            <button
-              type="button"
-              onClick={() => setEditModalOpen(false)}
-              className="btn btn-secondary"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={savingProfile}
-            >
-              {savingProfile ? 'Saving...' : 'Save Profile'}
-            </button>
           </div>
         </form>
       </Modal>
 
-      {/* Modal: Add Skill */}
+      {/* Add Skill Modal */}
       <Modal
         isOpen={addSkillModalOpen}
         onClose={() => setAddSkillModalOpen(false)}
-        title="Add a Skill to Teach"
-      >
-        <form onSubmit={handleAddSkill}>
-          <div className="form-group">
-            <label className="form-label">Skill Name *</label>
-            <input
-              type="text"
-              value={newSkillForm.name}
-              onChange={(e) => setNewSkillForm({ ...newSkillForm, name: e.target.value })}
-              placeholder="e.g. Graphic Design with Illustrator"
-              className="form-input"
-              required
-            />
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <div className="form-group">
-              <label className="form-label">Category *</label>
-              <select
-                value={newSkillForm.category}
-                onChange={(e) => setNewSkillForm({ ...newSkillForm, category: e.target.value })}
-                className="form-select"
-              >
-                {['Programming', 'Design', 'Business', 'Communication', 'Languages', 'Music', 'Sports', 'Academics', 'Other'].map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Proficiency Level *</label>
-              <select
-                value={newSkillForm.level}
-                onChange={(e) => setNewSkillForm({ ...newSkillForm, level: e.target.value })}
-                className="form-select"
-              >
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-                <option value="Expert">Expert</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">What do you want in exchange? *</label>
-            <input
-              type="text"
-              value={newSkillForm.wantedSkill}
-              onChange={(e) => setNewSkillForm({ ...newSkillForm, wantedSkill: e.target.value })}
-              placeholder="e.g. Python for Beginners"
-              className="form-input"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Skill Description *</label>
-            <textarea
-              value={newSkillForm.description}
-              onChange={(e) => setNewSkillForm({ ...newSkillForm, description: e.target.value })}
-              className="form-textarea"
-              rows="3"
-              placeholder="Explain how you teach and what topics you can cover..."
-              required
-            />
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
+        title="Add Skill to Profile"
+        maxWidth="520px"
+        footer={
+          <>
             <button
               type="button"
               onClick={() => setAddSkillModalOpen(false)}
-              className="btn btn-secondary"
+              className="btn btn-secondary btn-sm"
             >
               Cancel
             </button>
             <button
-              type="submit"
-              className="btn btn-primary"
+              type="button"
+              onClick={handleAddSkill}
+              className="btn btn-primary btn-sm"
               disabled={submittingSkill}
             >
               {submittingSkill ? 'Adding...' : 'Add Skill'}
             </button>
+          </>
+        }
+      >
+        <form onSubmit={handleAddSkill}>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Skill Name *</label>
+            <input
+              type="text"
+              placeholder="e.g. Python, Blender 3D, Public Speaking"
+              value={newSkillForm.name}
+              onChange={(e) => setNewSkillForm({ ...newSkillForm, name: e.target.value })}
+              className="form-input-neo"
+              required
+            />
+          </div>
+
+          <div className="form-group-neo">
+            <label className="form-label-neo">Description *</label>
+            <textarea
+              placeholder="What can you teach a classmate?"
+              value={newSkillForm.description}
+              onChange={(e) => setNewSkillForm({ ...newSkillForm, description: e.target.value })}
+              className="form-input-neo"
+              rows="3"
+              required
+            />
+          </div>
+
+          <div className="form-group-neo">
+            <label className="form-label-neo">Skill Wanted in Exchange *</label>
+            <input
+              type="text"
+              placeholder="e.g. React, UX Design, C++"
+              value={newSkillForm.wantedSkill}
+              onChange={(e) => setNewSkillForm({ ...newSkillForm, wantedSkill: e.target.value })}
+              className="form-input-neo"
+              required
+            />
           </div>
         </form>
       </Modal>
 
-      {/* Modal: Exchange Request */}
+      {/* Exchange Request Modal */}
       <Modal
         isOpen={exchangeModalOpen}
         onClose={() => setExchangeModalOpen(false)}
-        title={`Request Exchange with ${profileUser?.name}`}
+        title={`Request Exchange: ${selectedSkill?.name || 'Skill'}`}
+        maxWidth="500px"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setExchangeModalOpen(false)}
+              className="btn btn-secondary btn-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSendExchange}
+              className="btn btn-primary btn-sm"
+              disabled={submittingRequest}
+            >
+              {submittingRequest ? 'Sending...' : 'Send Trade Offer'}
+            </button>
+          </>
+        }
       >
-        {selectedSkill && (
-          <form onSubmit={handleSendExchange}>
-            <div style={{ background: 'var(--bg-main)', padding: '14px', borderRadius: 'var(--radius-md)', marginBottom: 16 }}>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>You want to learn:</p>
-              <p style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--primary)' }}>
-                {selectedSkill.name}
-              </p>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', marginTop: 4 }}>
-                Wanted in exchange: <strong>{selectedSkill.wantedSkill}</strong>
-              </p>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Message *</label>
-              <textarea
-                value={requestMessage}
-                onChange={(e) => setRequestMessage(e.target.value)}
-                className="form-textarea"
-                rows="4"
-                required
-              />
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-              <button
-                type="button"
-                onClick={() => setExchangeModalOpen(false)}
-                className="btn btn-secondary"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={submittingRequest}
-              >
-                {submittingRequest ? 'Sending...' : 'Send Request 🚀'}
-              </button>
-            </div>
-          </form>
-        )}
+        <form onSubmit={handleSendExchange}>
+          <div className="form-group-neo">
+            <label className="form-label-neo">Message to {profileUser.name}</label>
+            <textarea
+              value={requestMessage}
+              onChange={(e) => setRequestMessage(e.target.value)}
+              className="form-input-neo"
+              rows="3"
+              required
+            />
+          </div>
+        </form>
       </Modal>
     </div>
   );

@@ -1,13 +1,13 @@
 import React from 'react';
 
-const GRADIENTS = [
-  'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', // Indigo to Purple
-  'linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)', // Blue to Cyan
-  'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)', // Pink to Rose
-  'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)', // Emerald to Teal
-  'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)', // Amber to Red
-  'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)', // Violet to Pink
-  'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)', // Sky to Indigo
+const PASTELS = [
+  '#FFD447', // Warm Yellow
+  '#F4B6E6', // Soft Pink
+  '#B7DDBD', // Mint Green
+  '#FFA983', // Peach
+  '#5EC0F0', // Sky Blue
+  '#FFF6E4', // Cream
+  '#E8E5DD', // Light Gray
 ];
 
 export const getAvatarColor = (name = 'User') => {
@@ -15,12 +15,12 @@ export const getAvatarColor = (name = 'User') => {
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const index = Math.abs(hash) % GRADIENTS.length;
-  return GRADIENTS[index];
+  const index = Math.abs(hash) % PASTELS.length;
+  return PASTELS[index];
 };
 
 export const getInitials = (name = 'Student') => {
-  if (!name) return 'FL';
+  if (!name) return 'EE';
   const parts = name.trim().split(/\s+/);
   if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
@@ -33,7 +33,14 @@ const Avatar = ({ name = 'Student', size = 'md', className = '' }) => {
   return (
     <div
       className={`avatar avatar-${size} ${className}`}
-      style={{ background }}
+      style={{
+        backgroundColor: background,
+        border: '2px solid #111111',
+        color: '#111111',
+        fontWeight: 700,
+        boxShadow: '2px 2px 0px #111111',
+        borderRadius: '4px',
+      }}
       title={name}
       aria-label={name}
     >
