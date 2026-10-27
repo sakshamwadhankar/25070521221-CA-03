@@ -7,6 +7,10 @@ const Topbar = ({
   unreadCount = 0,
   onOpenNotifications,
   onToggleMobileMenu,
+  isCollapsed = false,
+  onToggleCollapse,
+  isFullScreen = false,
+  onToggleFullScreen,
 }) => {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -33,6 +37,17 @@ const Topbar = ({
           title="Open menu"
         >
           ☰
+        </button>
+
+        {/* Sidebar Compress / Expand Toggle Button */}
+        <button
+          type="button"
+          className="square-btn"
+          onClick={onToggleCollapse}
+          title={isCollapsed ? "Expand sidebar (Bada karein)" : "Compress sidebar (Chhota karein)"}
+          aria-label="Toggle sidebar width"
+        >
+          {isCollapsed ? '⇥' : '⇤'}
         </button>
 
         {/* Back Button [←] */}
@@ -62,6 +77,20 @@ const Topbar = ({
       </div>
 
       <div className="topbar-actions">
+        {/* Remove / Toggle Laptop Frame Button */}
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm"
+          onClick={onToggleFullScreen}
+          title={isFullScreen ? "Switch back to Laptop Frame look" : "Remove Laptop Frame (Full Screen View)"}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px' }}
+        >
+          <span>{isFullScreen ? '💻' : '🖥️'}</span>
+          <span style={{ display: 'none', md: 'inline' }} className="d-none-sm">
+            {isFullScreen ? 'Laptop Frame' : 'Remove Laptop'}
+          </span>
+        </button>
+
         {isAuthenticated ? (
           <>
             {/* Notification Bell Icon */}

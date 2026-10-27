@@ -20,6 +20,46 @@ const AppShell = ({ children }) => {
   const [notifModalOpen, setNotifModalOpen] = useState(false);
   const [prefModalOpen, setPrefModalOpen] = useState(false);
 
+  // Sidebar Compress / Expand & Resizing State (Saved in localStorage)
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    return localStorage.getItem('edu_sidebar_collapsed') === 'true';
+  });
+
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    const saved = localStorage.getItem('edu_sidebar_width');
+    return saved ? parseInt(saved, 10) : 250;
+  });
+
+  // Remove Laptop Frame Mode (Full screen edge-to-edge)
+  const [isFullScreen, setIsFullScreen] = useState(() => {
+    return localStorage.getItem('edu_fullscreen_mode') === 'true';
+  });
+
+  const handleToggleCollapse = () => {
+    setIsCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem('edu_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
+
+  const handleWidthChange = (newWidth) => {
+    setSidebarWidth(newWidth);
+    if (isCollapsed && newWidth > 120) {
+      setIsCollapsed(false);
+      localStorage.setItem('edu_sidebar_collapsed', 'false');
+    }
+    localStorage.setItem('edu_sidebar_width', String(newWidth));
+  };
+
+  const handleToggleFullScreen = () => {
+    setIsFullScreen((prev) => {
+      const next = !prev;
+      localStorage.setItem('edu_fullscreen_mode', String(next));
+      return next;
+    });
+  };
+
   // Poll alerts every 15s if logged in
   const fetchAlerts = async () => {
     if (!isAuthenticated) return;
@@ -81,9 +121,9 @@ const AppShell = ({ children }) => {
   };
 
   return (
-    <div className="app-viewport">
+    <div className={`app-viewport ${isFullScreen ? 'full-screen-mode' : ''}`}>
       <div className="app-frame">
-        {/* Mint Green Sidebar */}
+        {/* Mint Green Sidebar - FIXED, STEADY, COMPRESSIBLE */}
         <Sidebar
           isOpen={mobileMenuOpen}
           onClose={() => setMobileMenuOpen(false)}
@@ -91,14 +131,22 @@ const AppShell = ({ children }) => {
           pendingRequestsCount={pendingRequestsCount}
           onOpenNotifications={() => setNotifModalOpen(true)}
           onOpenPreferences={() => setPrefModalOpen(true)}
+          isCollapsed={isCollapsed}
+          onToggleCollapse={handleToggleCollapse}
+          sidebarWidth={sidebarWidth}
+          onWidthChange={handleWidthChange}
         />
 
-        {/* Cream Main Area */}
+        {/* Cream Main Area - ONLY THIS SECTION SCROLLS */}
         <div className="app-main">
           <Topbar
             unreadCount={unreadCount}
             onOpenNotifications={() => setNotifModalOpen(true)}
             onToggleMobileMenu={() => setMobileMenuOpen((prev) => !prev)}
+            isCollapsed={isCollapsed}
+            onToggleCollapse={handleToggleCollapse}
+            isFullScreen={isFullScreen}
+            onToggleFullScreen={handleToggleFullScreen}
           />
 
           <main className="app-content-body">
