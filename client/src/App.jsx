@@ -6,9 +6,7 @@ import AppShell from './components/AppShell';
 import ProtectedRoute, { PublicOnlyRoute } from './components/ProtectedRoute';
 
 // Pages
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import BeforeLoginHome from './pages/BeforeLoginHome';
 import Dashboard from './pages/Dashboard';
 import ExploreSkills from './pages/ExploreSkills';
 import Profile from './pages/Profile';
@@ -23,30 +21,28 @@ function App() {
         <ToastProvider>
           <AppShell>
             <Routes>
-              {/* 1. Landing Page */}
-              <Route path="/" element={<Landing />} />
+              {/* Before-Login Home UI (No sidebar, no content leak; redirects to /dashboard if logged in) */}
+              <Route path="/" element={<BeforeLoginHome />} />
 
-              {/* 2. Login Page */}
+              {/* Public Auth Routes */}
               <Route
                 path="/login"
                 element={
                   <PublicOnlyRoute>
-                    <Login />
+                    <BeforeLoginHome />
                   </PublicOnlyRoute>
                 }
               />
-
-              {/* 3. Signup Page */}
               <Route
                 path="/signup"
                 element={
                   <PublicOnlyRoute>
-                    <Signup />
+                    <BeforeLoginHome />
                   </PublicOnlyRoute>
                 }
               />
 
-              {/* 4. Dashboard Page (protected) */}
+              {/* Protected Routes (Visible ONLY after login) */}
               <Route
                 path="/dashboard"
                 element={
@@ -56,10 +52,24 @@ function App() {
                 }
               />
 
-              {/* 5. Explore Skills Page */}
-              <Route path="/skills" element={<ExploreSkills />} />
+              <Route
+                path="/skills"
+                element={
+                  <ProtectedRoute>
+                    <ExploreSkills />
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* 6. Profile Page */}
+              <Route
+                path="/projects"
+                element={
+                  <ProtectedRoute>
+                    <Projects />
+                  </ProtectedRoute>
+                }
+              />
+
               <Route
                 path="/profile"
                 element={
@@ -68,9 +78,15 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/profile/:id" element={<Profile />} />
+              <Route
+                path="/profile/:id"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* 7. Requests Page (protected) */}
               <Route
                 path="/requests"
                 element={
@@ -80,10 +96,6 @@ function App() {
                 }
               />
 
-              {/* 8. Projects Page */}
-              <Route path="/projects" element={<Projects />} />
-
-              {/* 9. Notifications Page (protected) */}
               <Route
                 path="/notifications"
                 element={
@@ -93,7 +105,7 @@ function App() {
                 }
               />
 
-              {/* Catch-all redirect to Landing */}
+              {/* Catch-all redirect to / */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </AppShell>

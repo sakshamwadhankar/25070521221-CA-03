@@ -120,6 +120,15 @@ const AppShell = ({ children }) => {
     }
   };
 
+  // When NOT authenticated, render pure before-login UI (Zero content leak, NO sidebar)
+  if (!isAuthenticated) {
+    return (
+      <div className="auth-viewport">
+        {children}
+      </div>
+    );
+  }
+
   return (
     <div className={`app-viewport ${isFullScreen ? 'full-screen-mode' : ''}`}>
       <div className="app-frame">

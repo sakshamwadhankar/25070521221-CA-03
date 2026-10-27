@@ -39,17 +39,6 @@ const Topbar = ({
           ☰
         </button>
 
-        {/* Sidebar Compress / Expand Toggle Button */}
-        <button
-          type="button"
-          className="square-btn"
-          onClick={onToggleCollapse}
-          title={isCollapsed ? "Expand sidebar (Bada karein)" : "Compress sidebar (Chhota karein)"}
-          aria-label="Toggle sidebar width"
-        >
-          {isCollapsed ? '⇥' : '⇤'}
-        </button>
-
         {/* Back Button [←] */}
         <button
           type="button"
